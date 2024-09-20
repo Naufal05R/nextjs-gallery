@@ -1,3 +1,9 @@
+import { Button } from "@/components/ui/button";
+
 export default function DashboardPage() {
-  return <></>;
+  return <main>
+    <Button>
+        Ini Adalah Button
+    </Button>
+  </main>;
 }
