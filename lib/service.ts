@@ -15,12 +15,10 @@ const minioClient = new Minio.Client({
 });
 
 minioClient
-  .makeBucket("nextjs-gallery", "", { ObjectLocking: true })
-  .then(() => {
-    console.log(
-      "Bucket created successfully on play-min.io and enabled object lock"
-    );
+  .listBuckets()
+  .then((buckets) => {
+    console.log("Bucket names: ", buckets);
   })
-  .catch((err) => {
-    console.log("Error creating bucket with object lock.", err);
+  .catch((error) => {
+    console.error(error);
   });
