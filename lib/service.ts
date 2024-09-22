@@ -24,13 +24,30 @@ export const getAllBuckets = async () => {
   }
 };
 
-minioClient
-  .putObject("nextjs-gallery", "test.txt", "../public/file.txt", undefined, {
-    "Content-Type": "text/plain",
-  })
-  .then((result) => {
-    console.log("Successfully uploaded data.", result);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+export const createObject = async ({
+  bucketName,
+  objectName,
+  objectStream,
+  objectSize,
+  objectMetaData,
+}: {
+  bucketName: string;
+  objectName: string;
+  objectStream: string;
+  objectSize?: number;
+  objectMetaData?: Record<string, unknown>;
+}) => {
+  try {
+    const result = await minioClient.putObject(
+      bucketName,
+      objectName,
+      objectStream,
+      objectSize,
+      objectMetaData
+    );
+
+    return result;
+  } catch (error) {
+    console.log("Error creating object", error);
+  }
+};
