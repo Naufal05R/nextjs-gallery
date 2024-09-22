@@ -51,3 +51,12 @@ export const createObject = async ({
     console.log("Error creating object", error);
   }
 };
+
+minioClient
+  .fGetObject("nextjs-gallery", "galaxy.jpeg", "./galaxy.jpeg")
+  .then(function (result) {
+    console.log("Successfully downloader data.", result);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
