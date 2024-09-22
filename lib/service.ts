@@ -20,7 +20,7 @@ export const getAllBuckets = async () => {
 
     return buckets;
   } catch (error) {
-    console.log("Error getting all buckets", error);
+    console.error("Error getting all buckets: ", error);
   }
 };
 
@@ -48,15 +48,31 @@ export const createObject = async ({
 
     return result;
   } catch (error) {
-    console.log("Error creating object", error);
+    console.error("Error creating object: ", error);
   }
 };
 
-minioClient
-  .fGetObject("nextjs-gallery", "galaxy.jpeg", "./galaxy.jpeg")
-  .then(function (result) {
-    console.log("Successfully downloader data.", result);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+export const getObject = async ({
+  bucketName,
+  objectName,
+  filePath,
+  options,
+}: {
+  bucketName: string;
+  objectName: string;
+  filePath: string;
+  options?: Record<string, unknown>;
+}) => {
+  try {
+    const result = await minioClient.fGetObject(
+      bucketName,
+      objectName,
+      filePath,
+      options
+    );
+
+    return result;
+  } catch (error) {
+    console.error("Error getting object: ", error);
+  }
+};
