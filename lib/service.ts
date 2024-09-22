@@ -14,11 +14,12 @@ const minioClient = new Minio.Client({
   secretKey: SECRET_KEY,
 });
 
-minioClient
-  .listBuckets()
-  .then((buckets) => {
-    console.log("Bucket names: ", buckets);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+export const getAllBuckets = async () => {
+  try {
+    const buckets = await minioClient.listBuckets();
+
+    return buckets;
+  } catch (error) {
+    console.log("Error getting all buckets", error);
+  }
+};
