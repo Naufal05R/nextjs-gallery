@@ -23,3 +23,14 @@ export const getAllBuckets = async () => {
     console.log("Error getting all buckets", error);
   }
 };
+
+minioClient
+  .putObject("nextjs-gallery", "test.txt", "../public/file.txt", undefined, {
+    "Content-Type": "text/plain",
+  })
+  .then((result) => {
+    console.log("Successfully uploaded data.", result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
