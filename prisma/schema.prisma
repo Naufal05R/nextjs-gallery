@@ -32,7 +32,7 @@ model Gallery {
 
 model Image {
   id           Int      @id @default(autoincrement())
-  alt          String
+  name          String
   source       String
   category     String
   width        Int
