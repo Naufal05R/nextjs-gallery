@@ -77,4 +77,22 @@ export const getObject = async ({
   }
 };
 
-const getAllObjects = async () => {}
+const streamObjects = ({
+  bucketName,
+  includeMetadata,
+}: {
+  bucketName: string;
+  includeMetadata?: boolean;
+}) => {
+  const stream: Minio.BucketStream<Minio.BucketItem> = includeMetadata
+    ? minioClient.extensions.listObjectsV2WithMetadata(bucketName)
+    : minioClient.listObjectsV2(bucketName);
+
+  stream.on("data", function (data) {
+    console.log("V2", data);
+  });
+
+  stream.on("error", function (err) {
+    console.log(err);
+  });
+};
