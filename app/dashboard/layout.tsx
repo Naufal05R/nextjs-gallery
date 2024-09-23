@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 export default function DashboardLayout({
   children,
@@ -8,7 +9,7 @@ export default function DashboardLayout({
   return (
     <>
       <Header />
-      {children}
+      <TooltipProvider>{children}</TooltipProvider>
     </>
   );
 }
