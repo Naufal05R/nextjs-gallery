@@ -2,18 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   File,
-  Home,
-  LineChart,
   ListFilter,
   MoreHorizontal,
-  Package,
   Package2,
   PanelLeft,
   PlusCircle,
   Search,
   Settings,
-  ShoppingCart,
-  Users2,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +17,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -61,7 +55,6 @@ import {
 } from "@/components/ui/tooltip";
 import React from "react";
 import { dashboardNav } from "@/constants/navigation";
-import { cn } from "@/lib/utils";
 
 export const description =
   "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.";
