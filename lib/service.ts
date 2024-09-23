@@ -77,7 +77,7 @@ export const getObject = async ({
   }
 };
 
-const streamObjects = ({
+export const streamObjects = ({
   bucketName,
   includeMetadata,
 }: {
