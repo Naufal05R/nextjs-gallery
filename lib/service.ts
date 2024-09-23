@@ -76,3 +76,5 @@ export const getObject = async ({
     console.error("Error getting object: ", error);
   }
 };
+
+const getAllObjects = async () => {}
