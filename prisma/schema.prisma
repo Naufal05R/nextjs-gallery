@@ -20,9 +20,16 @@ model User {
   posts Gallery[]
 }
 
+model Icon {
+  id        Int     @id @default(autoincrement())
+  gallery   Gallery @relation(fields: [galleryId], references: [id])
+  galleryId Int     @unique
+}
+
 model Gallery {
   id        Int      @id @default(autoincrement())
   name      String
+  icon      Icon?
   images    Image[]
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
@@ -30,16 +37,40 @@ model Gallery {
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String
+  images Image[]
+}
+
+model Tag {
+  id     Int            @id @default(autoincrement())
+  name   String
+  images TagsOnImages[]
+}
+
 model Image {
-  id           Int      @id @default(autoincrement())
-  name          String
+  id           Int            @id @default(autoincrement())
+  title        String
   source       String
-  category     String
   width        Int
   height       Int
-  published    Boolean  @default(false)
-  collection   Gallery  @relation(fields: [collectionId], references: [id])
+  published    Boolean        @default(false)
+  tags         TagsOnImages[]
+  category     Category       @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+  collection   Gallery        @relation(fields: [collectionId], references: [id])
   collectionId Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model TagsOnImages {
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      Int
+  image      Image    @relation(fields: [imageId], references: [id])
+  imageId    Int
+  assignedAt DateTime @default(now())
+
+  @@id([tagId, imageId])
 }
