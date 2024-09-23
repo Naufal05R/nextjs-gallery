@@ -12,3 +12,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id    Int       @id @default(autoincrement())
+  email String    @unique
+  name  String?
+  posts Gallery[]
+}
+
+model Gallery {
+  id        Int      @id @default(autoincrement())
+  name      String
+  images    Image[]
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id           Int      @id @default(autoincrement())
+  alt          String
+  source       String
+  category     String
+  width        Int
+  height       Int
+  published    Boolean  @default(false)
+  collection   Gallery  @relation(fields: [collectionId], references: [id])
+  collectionId Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
