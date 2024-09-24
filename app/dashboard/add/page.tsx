@@ -22,29 +22,42 @@ export default function DashboardAddPage() {
     <main className="grid place-items-center h-screen w-full px-4 sm:px-8 lg:px-16 py-2 sm:py-4 lg:py-8">
       <Card className="w-full max-w-96">
         <CardHeader>
-          <CardTitle>Create project</CardTitle>
-          <CardDescription>
-            Deploy your new project in one-click.
-          </CardDescription>
+          <CardTitle>Create image</CardTitle>
+          <CardDescription>Create your image.</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Name of your project" />
+                <Input id="name" type="text" placeholder="Name of your image" />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="framework">Framework</Label>
+                <Label htmlFor="category">Category</Label>
+                <div className="flex items-center">
+                  <Input id="_" type="text" placeholder="Name of your image" />
+                  <Select>
+                    <SelectTrigger id="category">
+                      <SelectValue placeholder="Select Category" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="next">Nature</SelectItem>
+                      <SelectItem value="sveltekit">Modern</SelectItem>
+                      <SelectItem value="astro">Abstract</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="gallery">Gallery</Label>
                 <Select>
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="Select" />
+                  <SelectTrigger id="gallery">
+                    <SelectValue placeholder="Select Gallery" />
                   </SelectTrigger>
                   <SelectContent position="popper">
-                    <SelectItem value="next">Next.js</SelectItem>
-                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                    <SelectItem value="astro">Astro</SelectItem>
-                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                    <SelectItem value="next">Art</SelectItem>
+                    <SelectItem value="sveltekit">Picture</SelectItem>
+                    <SelectItem value="astro">AI</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
