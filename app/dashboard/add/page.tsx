@@ -42,12 +42,12 @@ import { cn, getEnumObject } from "@/lib/utils";
 import { Check, ChevronsUpDown, Search } from "lucide-react";
 import { useState } from "react";
 
-enum ModelCategoryEnum {
+enum ModelSelectFieldEnum {
   Exist,
   Void,
 }
 
-type ModelCategoryType = Lowercase<keyof typeof ModelCategoryEnum> | "";
+type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
 const frameworks = [
   {
@@ -72,7 +72,7 @@ const frameworks = [
   },
 ];
 
-const SelectField = ({ id, type }: { id: string; type: ModelCategoryType }) => {
+const SelectField = ({ id, type }: { id: string; type: ModelSelectFieldType }) => {
   switch (type) {
     case "void":
       return <Input id={id} type="text" placeholder="My New Category" />;
@@ -97,9 +97,9 @@ const SelectField = ({ id, type }: { id: string; type: ModelCategoryType }) => {
 };
 
 export default function DashboardAddPage() {
-  const [type, setType] = useState<ModelCategoryType>("");
+  const [type, setType] = useState<ModelSelectFieldType>("");
 
-  const modelCategoryObject = getEnumObject(ModelCategoryEnum);
+  const modelCategoryObject = getEnumObject(ModelSelectFieldEnum);
 
   return (
     <main className="grid h-screen w-full place-items-center px-4 py-2 sm:px-8 sm:py-4 lg:px-16 lg:py-8">
@@ -120,7 +120,7 @@ export default function DashboardAddPage() {
                 <RadioGroup
                   defaultValue=""
                   className="flex items-center gap-x-4 py-2"
-                  onValueChange={(value: ModelCategoryType) => setType(value)}
+                  onValueChange={(value: ModelSelectFieldType) => setType(value)}
                 >
                   {modelCategoryObject.map((category) => {
                     category = `${category}`.toLowerCase();
