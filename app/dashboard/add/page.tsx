@@ -38,7 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn, getEnumObject } from "@/lib/utils";
 import { Check, ChevronsUpDown, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -99,6 +99,8 @@ const SelectField = ({ id, type }: { id: string; type: ModelCategoryType }) => {
 export default function DashboardAddPage() {
   const [type, setType] = useState<ModelCategoryType>("");
 
+  const modelCategoryObject = getEnumObject(ModelCategoryEnum);
+
   return (
     <main className="grid h-screen w-full place-items-center px-4 py-2 sm:px-8 sm:py-4 lg:px-16 lg:py-8">
       <Card className="w-full max-w-96">
@@ -120,28 +122,23 @@ export default function DashboardAddPage() {
                   className="flex items-center gap-x-4 py-2"
                   onValueChange={(value: ModelCategoryType) => setType(value)}
                 >
-                  <Label
-                    htmlFor="exist_category"
-                    className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
-                  >
-                    <RadioGroupItem value="exist" id="exist_category" hidden />
-                    <span>Select Exist</span>
-                    <Check
-                      size={16}
-                      className="invisible ml-auto group-has-[:checked]:visible"
-                    />
-                  </Label>
-                  <Label
-                    htmlFor="void_category"
-                    className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
-                  >
-                    <RadioGroupItem value="void" id="void_category" hidden />
-                    <span>Create New</span>
-                    <Check
-                      size={16}
-                      className="invisible ml-auto group-has-[:checked]:visible"
-                    />
-                  </Label>
+                  {modelCategoryObject.map((category) => {
+                    category = `${category}`.toLowerCase();
+                    return (
+                      <Label
+                        key={category}
+                        htmlFor={category}
+                        className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
+                      >
+                        <RadioGroupItem value={category} id={category} hidden />
+                        <span className="capitalize">Select {category}</span>
+                        <Check
+                          size={16}
+                          className="invisible ml-auto group-has-[:checked]:visible"
+                        />
+                      </Label>
+                    );
+                  })}
                 </RadioGroup>
 
                 <SelectField id="category" type={type} />
