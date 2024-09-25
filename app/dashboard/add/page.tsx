@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn, getEnumObject } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { Check, Image } from "lucide-react";
 import { useState } from "react";
 
 enum ModelSelectFieldEnum {
@@ -154,6 +154,15 @@ export default function DashboardAddPage() {
                   fields={modelCategoryObject}
                 />
               ))}
+              <div className="flex flex-col space-y-1.5">
+                <Label
+                  htmlFor="image"
+                  className="aspect-square w-full rounded-md border grid place-items-center cursor-pointer"
+                >
+                  <Input id="image" type="file" hidden className="hidden" />
+                  <Image size={128} strokeWidth={0.5} className="text-slate-400" />
+                </Label>
+              </div>
             </div>
           </form>
         </CardContent>
