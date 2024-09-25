@@ -9,33 +9,58 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Search } from "lucide-react";
 import { useState } from "react";
+
+enum ModelCategoryEnum {
+  Exist,
+  Void,
+}
+
+type ModelCategoryType = Lowercase<keyof typeof ModelCategoryEnum> | "";
 
 const frameworks = [
   {
-    value: "next.js",
-    label: "Next.js",
+    value: "nextjs",
+    label: "Nextjs",
   },
   {
     value: "sveltekit",
     label: "SvelteKit",
   },
   {
-    value: "nuxt.js",
-    label: "Nuxt.js",
+    value: "nuxtjs",
+    label: "Nuxtjs",
   },
   {
     value: "remix",
@@ -47,12 +72,35 @@ const frameworks = [
   },
 ];
 
+const SelectField = ({ id, type }: { id: string; type: ModelCategoryType }) => {
+  switch (type) {
+    case "void":
+      return <Input id={id} type="text" placeholder="My New Category" />;
+    default:
+      return (
+        <Select disabled={!type}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {frameworks.map((framework) => (
+                <SelectItem key={framework.value} value={framework.value}>
+                  {framework.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      );
+  }
+};
+
 export default function DashboardAddPage() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [type, setType] = useState<ModelCategoryType>("");
 
   return (
-    <main className="grid place-items-center h-screen w-full px-4 sm:px-8 lg:px-16 py-2 sm:py-4 lg:py-8">
+    <main className="grid h-screen w-full place-items-center px-4 py-2 sm:px-8 sm:py-4 lg:px-16 lg:py-8">
       <Card className="w-full max-w-96">
         <CardHeader>
           <CardTitle>Create image</CardTitle>
@@ -67,55 +115,36 @@ export default function DashboardAddPage() {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="category">Category</Label>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-full justify-between"
-                      >
-                        {value
-                          ? frameworks.find(
-                              (framework) => framework.value === value
-                            )?.label
-                          : "Select framework..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Search framework..." />
-                        <CommandList>
-                          <CommandEmpty>No framework found.</CommandEmpty>
-                          <CommandGroup>
-                            {frameworks.map((framework) => (
-                              <CommandItem
-                                key={framework.value}
-                                value={framework.value}
-                                onSelect={(currentValue) => {
-                                  setValue(
-                                    currentValue === value ? "" : currentValue
-                                  );
-                                  setOpen(false);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    value === framework.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {framework.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                <RadioGroup
+                  defaultValue=""
+                  className="flex items-center gap-x-4 py-2"
+                  onValueChange={(value: ModelCategoryType) => setType(value)}
+                >
+                  <Label
+                    htmlFor="exist_category"
+                    className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
+                  >
+                    <RadioGroupItem value="exist" id="exist_category" hidden />
+                    <span>Select Exist</span>
+                    <Check
+                      size={16}
+                      className="invisible ml-auto group-has-[:checked]:visible"
+                    />
+                  </Label>
+                  <Label
+                    htmlFor="void_category"
+                    className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
+                  >
+                    <RadioGroupItem value="void" id="void_category" hidden />
+                    <span>Create New</span>
+                    <Check
+                      size={16}
+                      className="invisible ml-auto group-has-[:checked]:visible"
+                    />
+                  </Label>
+                </RadioGroup>
+
+                <SelectField id="category" type={type} />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="gallery">Gallery</Label>
