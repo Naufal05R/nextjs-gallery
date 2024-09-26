@@ -1,5 +1,6 @@
 "use client";
 
+import { InputImage } from "@/components/InputImage";
 import { InputSeveral } from "@/components/InputSeveral";
 import { SelectField } from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 import { getEnumObject } from "@/lib/utils";
-import { ImageIcon } from "lucide-react";
 
 export default function DashboardAddPage() {
   const modelCategoryObject = getEnumObject(ModelSelectFieldEnum);
@@ -43,22 +43,12 @@ export default function DashboardAddPage() {
                   fields={modelCategoryObject}
                 />
               ))}
-              <div className="flex flex-col space-y-4">
-                <Label required>Image</Label>
-                <Label
-                  htmlFor="image"
-                  className="grid aspect-video w-full cursor-pointer place-items-center rounded-md border"
-                >
-                  <Input id="image" type="file" hidden className="hidden" />
-                  <ImageIcon
-                    size={96}
-                    strokeWidth={0.3}
-                    className="text-slate-200"
-                  />
-                </Label>
-              </div>
+              <InputImage />
 
-              <InputSeveral title="tags" placeholder="Add tags to image (separate it with comma)" />
+              <InputSeveral
+                title="tags"
+                placeholder="Add tags to image (separate it with comma)"
+              />
             </div>
           </form>
         </CardContent>
