@@ -2,17 +2,9 @@
 
 import { Input } from "@/components";
 import { InputImage } from "@/components/client/InputImage";
-import { InputSeveral } from "@/components/client/InputSeveral";
 import { SelectField } from "@/components/client/SelectField";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 import { getEnumObject } from "@/lib/utils";
 
@@ -31,18 +23,11 @@ export default function DashboardAddPage() {
             <div className="grid w-full items-center gap-4">
               <Input.Base title="Name of your image" />
               {["Category", "Gallery"].map((title) => (
-                <SelectField
-                  key={title}
-                  title={title}
-                  fields={modelCategoryObject}
-                />
+                <SelectField key={title} title={title} fields={modelCategoryObject} />
               ))}
               <InputImage />
 
-              <InputSeveral
-                title="tags"
-                placeholder="Add tags to image (separate it with comma)"
-              />
+              <Input.Several title="tags" placeholder="Add tags to image (separate it with comma)" />
             </div>
           </form>
         </CardContent>
