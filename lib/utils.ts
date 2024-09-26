@@ -10,3 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getEnumObject<E extends Enum<E>>(value: E) {
   return Object.values(value).slice(0, Object.values(value).length / 2);
 }
+
+export function generateId(prefix: string) {
+  return `${prefix}_${crypto.randomUUID()}`;
+}
