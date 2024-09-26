@@ -42,7 +42,7 @@ const frameworks = [
   },
 ];
 
-const SelectField = ({
+const SelectFieldDropdown = ({
   id,
   title,
   type,
@@ -74,7 +74,7 @@ const SelectField = ({
   }
 };
 
-export const SelectFieldType = ({
+export const SelectField = ({
   title,
   fields,
 }: {
@@ -113,7 +113,7 @@ export const SelectFieldType = ({
         })}
       </RadioGroup>
 
-      <SelectField id={title.toLowerCase()} title={title} type={type} />
+      <SelectFieldDropdown id={title.toLowerCase()} title={title} type={type} />
     </div>
   );
 };
