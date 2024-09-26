@@ -44,14 +44,17 @@ export const InputSeveral = ({ title, placeholder }: InputSeveralProps) => {
           { hidden: !several?.length },
         )}
       >
-        {several?.map((tag) => (
+        {several?.map((inputted) => (
           <li
-            key={tag}
+            key={inputted}
             className="relative -ml-px w-fit select-none rounded bg-slate-800 py-1 pl-2.5 pr-7 text-sm text-slate-100"
           >
-            {tag}
+            {inputted}
 
             <X
+              onClick={() => {
+                setSeveral(several.filter((i) => i !== inputted));
+              }}
               size={16}
               className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
             />
