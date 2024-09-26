@@ -14,9 +14,9 @@ import { ModelSelectFieldEnum } from "@/constants/enum";
 
 type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
-interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
+interface BaseVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
 
-const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder }, ref) => {
+const BaseVariant = forwardRef<HTMLInputElement, BaseVariantProps>(({ title, placeholder }, ref) => {
   const uniqueId = generateId(title);
 
   return (
@@ -29,7 +29,7 @@ const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, pla
   );
 });
 
-BaseVariant.displayName = "FieldBase";
+BaseVariant.displayName = "BaseVariant";
 
 interface SeveralVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
 
@@ -82,7 +82,7 @@ const SeveralVariant = forwardRef<HTMLInputElement, SeveralVariantProps>(({ titl
   );
 });
 
-SeveralVariant.displayName = "FieldSeveral";
+SeveralVariant.displayName = "SeveralVariant";
 
 interface ImageVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
 
@@ -121,13 +121,13 @@ const ImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title },
   );
 });
 
-ImageVariant.displayName = "FieldImage";
+ImageVariant.displayName = "ImageVariant";
 
 interface SelectVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {
   fields: Array<string>;
 }
 
-export const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({ title, fields }, ref) => {
+const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({ title, fields }, ref) => {
   const [type, setType] = useState<ModelSelectFieldType>("");
 
   const SelectFieldDropdown = ({ id, title, type }: { id: string; title: string; type: ModelSelectFieldType }) => {
@@ -182,11 +182,13 @@ export const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({
   );
 });
 
-SelectVariant.displayName = "FieldSelect";
+SelectVariant.displayName = "SelectVariant";
 
-export const Component = {
+const Component = {
   Base: BaseVariant,
   Several: SeveralVariant,
   Image: ImageVariant,
   Select: SelectVariant,
 };
+
+export default Component;
