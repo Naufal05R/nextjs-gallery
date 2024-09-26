@@ -3,18 +3,27 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { cn, generateId } from "@/lib/utils";
 import { X } from "lucide-react";
+import { VariantProps } from "class-variance-authority";
 
-export const InputSeveral = () => {
+interface InputSeveralProps extends VariantProps<typeof Input> {
+  title: string;
+}
+
+export const InputSeveral = ({ title, placeholder }: InputSeveralProps) => {
   const [several, setSeveral] = useState<Array<string>>([]);
   const [value, setValue] = useState("");
 
+  const uniqueId = generateId(title);
+
   return (
     <div className="flex flex-col space-y-4">
-      <Label htmlFor="tags">Tags</Label>
+      <Label htmlFor={uniqueId} className="capitalize">
+        {title}
+      </Label>
       <Input
-        id="tags"
+        id={uniqueId}
         value={value}
         onChange={(e) => {
           const { value } = e.target;
@@ -26,15 +35,13 @@ export const InputSeveral = () => {
           }
         }}
         type="text"
-        placeholder="Add tags to image"
+        placeholder={placeholder}
       />
 
       <ul
         className={cn(
           "flex flex-wrap items-center gap-1.5 rounded-md border p-1.5",
-          {
-            hidden: !several?.length,
-          },
+          { hidden: !several?.length },
         )}
       >
         {several?.map((tag) => (
