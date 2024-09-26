@@ -5,8 +5,14 @@ import Image from "next/image";
 import { cn, generateId } from "@/lib/utils";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { ImageIcon, X } from "lucide-react";
+import { Check, ImageIcon, X } from "lucide-react";
 import { VariantProps } from "class-variance-authority";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { frameworks } from "@/constants/framework";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { ModelSelectFieldEnum } from "@/constants/enum";
+
+type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
 interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
 
@@ -25,7 +31,9 @@ const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, pla
 
 BaseVariant.displayName = "FieldBase";
 
-const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder }, ref) => {
+interface SeveralVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
+
+const SeveralVariant = forwardRef<HTMLInputElement, SeveralVariantProps>(({ title, placeholder }, ref) => {
   const [several, setSeveral] = useState<Array<string>>([]);
   const [value, setValue] = useState("");
 
@@ -76,7 +84,9 @@ const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, 
 
 SeveralVariant.displayName = "FieldSeveral";
 
-const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title }, ref) => {
+interface ImageVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
+
+const ImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title }, ref) => {
   const [image, setImage] = useState<File>();
 
   const uniqueId = generateId(title);
@@ -113,8 +123,70 @@ const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title }, 
 
 ImageVariant.displayName = "FieldImage";
 
+interface SelectVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {
+  fields: Array<string>;
+}
+
+export const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({ title, fields }, ref) => {
+  const [type, setType] = useState<ModelSelectFieldType>("");
+
+  const SelectFieldDropdown = ({ id, title, type }: { id: string; title: string; type: ModelSelectFieldType }) => {
+    switch (type) {
+      case "void":
+        return <Input id={id} type="text" placeholder={`My New ${title}`} />;
+      default:
+        return (
+          <Select disabled={!type}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={`Select ${title}`} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {frameworks.map((framework) => (
+                  <SelectItem key={framework.value} value={framework.value}>
+                    {framework.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        );
+    }
+  };
+
+  return (
+    <div className="flex flex-col space-y-4" ref={ref}>
+      <Label required>{title}</Label>
+      <RadioGroup
+        defaultValue=""
+        className="flex items-center gap-x-4"
+        onValueChange={(value: ModelSelectFieldType) => setType(value)}
+      >
+        {fields.map((field) => {
+          return (
+            <Label
+              key={title + field}
+              htmlFor={title + field}
+              className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
+            >
+              <RadioGroupItem value={field.toLowerCase()} id={title + field} hidden />
+              <span className="capitalize">Select {field}</span>
+              <Check size={16} className="invisible ml-auto group-has-[:checked]:visible" />
+            </Label>
+          );
+        })}
+      </RadioGroup>
+
+      <SelectFieldDropdown id={title.toLowerCase()} title={title} type={type} />
+    </div>
+  );
+});
+
+SelectVariant.displayName = "FieldSelect";
+
 export const Component = {
   Base: BaseVariant,
   Several: SeveralVariant,
   Image: ImageVariant,
+  Select: SelectVariant,
 };
