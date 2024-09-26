@@ -1,8 +1,9 @@
 "use client";
 
-import { InputImage } from "@/components/InputImage";
-import { InputSeveral } from "@/components/InputSeveral";
-import { SelectField } from "@/components/SelectField";
+import { Input } from "@/components";
+import { InputImage } from "@/components/client/InputImage";
+import { InputSeveral } from "@/components/client/InputSeveral";
+import { SelectField } from "@/components/client/SelectField";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,8 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 import { getEnumObject } from "@/lib/utils";
 
@@ -30,12 +29,7 @@ export default function DashboardAddPage() {
         <CardContent>
           <form>
             <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-4">
-                <Label htmlFor="name" required>
-                  Name
-                </Label>
-                <Input id="name" type="text" placeholder="Name of your image" />
-              </div>
+              <Input.Base title="Name of your image" />
               {["Category", "Gallery"].map((title) => (
                 <SelectField
                   key={title}
