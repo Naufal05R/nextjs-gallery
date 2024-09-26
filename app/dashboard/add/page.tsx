@@ -44,20 +44,21 @@ export default function DashboardAddPage() {
                 />
               ))}
               <div className="flex flex-col space-y-4">
+                <Label required>Image</Label>
                 <Label
                   htmlFor="image"
-                  className="grid aspect-square w-full cursor-pointer place-items-center rounded-md border"
+                  className="grid aspect-video w-full cursor-pointer place-items-center rounded-md border"
                 >
                   <Input id="image" type="file" hidden className="hidden" />
                   <ImageIcon
-                    size={128}
-                    strokeWidth={0.5}
-                    className="text-slate-400"
+                    size={96}
+                    strokeWidth={0.3}
+                    className="text-slate-200"
                   />
                 </Label>
               </div>
 
-              <InputSeveral />
+              <InputSeveral title="tags" placeholder="Add tags to image (separate it with comma)" />
             </div>
           </form>
         </CardContent>
