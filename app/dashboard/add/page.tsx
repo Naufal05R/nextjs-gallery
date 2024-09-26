@@ -28,7 +28,9 @@ export default function DashboardAddPage() {
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name" required>
+                  Name
+                </Label>
                 <Input id="name" type="text" placeholder="Name of your image" />
               </div>
               {["Category", "Gallery"].map((title) => (
@@ -50,6 +52,11 @@ export default function DashboardAddPage() {
                     className="text-slate-400"
                   />
                 </Label>
+              </div>
+
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="tags">Tags</Label>
+                <Input id="tags" type="text" placeholder="Name of your image" />
               </div>
             </div>
           </form>
