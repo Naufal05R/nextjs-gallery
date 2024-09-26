@@ -1,10 +1,10 @@
 "use client";
 
-import { Input } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 import { getEnumObject } from "@/lib/utils";
+import Input from "@/components/Input";
 
 export default function DashboardAddPage() {
   const modelCategoryObject = getEnumObject(ModelSelectFieldEnum);
