@@ -3,7 +3,14 @@
 import { useState } from "react";
 
 import React from "react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -78,7 +85,7 @@ export const SelectFieldType = ({
 
   return (
     <div className="flex flex-col space-y-1.5">
-      <Label>{title}</Label>
+      <Label required>{title}</Label>
       <RadioGroup
         defaultValue=""
         className="flex items-center gap-x-4 py-2"
