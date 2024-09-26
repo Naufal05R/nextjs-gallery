@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@/components";
-import { InputImage } from "@/components/client/InputImage";
 import { SelectField } from "@/components/client/SelectField";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +24,7 @@ export default function DashboardAddPage() {
               {["Category", "Gallery"].map((title) => (
                 <SelectField key={title} title={title} fields={modelCategoryObject} />
               ))}
-              <InputImage />
+              <Input.Image title="Image" />
 
               <Input.Several title="tags" placeholder="Add tags to image (separate it with comma)" />
             </div>
