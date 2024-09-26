@@ -19,7 +19,7 @@ export default function DashboardAddPage() {
         <CardContent>
           <form>
             <div className="grid w-full items-center gap-4">
-              <Input.Base title="Name of your image" />
+              <Input.Base title="name" placeholder="Name of your image" />
               {["Category", "Gallery"].map((title) => (
                 <Input.Select key={title} title={title} fields={modelCategoryObject} />
               ))}
