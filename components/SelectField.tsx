@@ -84,11 +84,11 @@ export const SelectFieldType = ({
   const [type, setType] = useState<ModelSelectFieldType>("");
 
   return (
-    <div className="flex flex-col space-y-1.5">
+    <div className="flex flex-col space-y-4">
       <Label required>{title}</Label>
       <RadioGroup
         defaultValue=""
-        className="flex items-center gap-x-4 py-2"
+        className="flex items-center gap-x-4"
         onValueChange={(value: ModelSelectFieldType) => setType(value)}
       >
         {fields.map((field) => {
