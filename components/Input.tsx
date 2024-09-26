@@ -21,7 +21,7 @@ const BaseVariant = forwardRef<HTMLInputElement, BaseVariantProps>(({ title, pla
 
   return (
     <div className="flex flex-col space-y-4" ref={ref}>
-      <Label htmlFor={uniqueId} required>
+      <Label htmlFor={uniqueId} required className="capitalize">
         {title}
       </Label>
       <Input placeholder={placeholder} id={uniqueId} type="text" />
@@ -156,7 +156,9 @@ const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({ title,
 
   return (
     <div className="flex flex-col space-y-4" ref={ref}>
-      <Label required>{title}</Label>
+      <Label required className="capitalize">
+        {title}
+      </Label>
       <RadioGroup
         defaultValue=""
         className="flex items-center gap-x-4"
