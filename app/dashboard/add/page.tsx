@@ -1,3 +1,5 @@
+"use client";
+
 import { SelectFieldType } from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +13,58 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ModelSelectFieldEnum } from "@/constants/enum";
-import { getEnumObject } from "@/lib/utils";
-import { ImageIcon } from "lucide-react";
+import { cn, getEnumObject } from "@/lib/utils";
+import { ImageIcon, X } from "lucide-react";
+import { useState } from "react";
+
+const InputSeveral = () => {
+  const [several, setSeveral] = useState<Array<string>>([]);
+  const [value, setValue] = useState("");
+
+  return (
+    <div className="flex flex-col space-y-4">
+      <Label htmlFor="tags">Tags</Label>
+      <Input
+        id="tags"
+        value={value}
+        onChange={(e) => {
+          const { value } = e.target;
+          setValue(value);
+
+          if (value.endsWith(",")) {
+            setSeveral([...several, value.slice(0, -1)]);
+            setValue("");
+          }
+        }}
+        type="text"
+        placeholder="Add tags to image"
+      />
+
+      <ul
+        className={cn(
+          "flex flex-wrap items-center gap-1.5 rounded-md border p-1.5",
+          {
+            hidden: !several?.length,
+          },
+        )}
+      >
+        {several?.map((tag) => (
+          <li
+            key={tag}
+            className="relative -ml-px w-fit select-none rounded bg-slate-800 py-1 pl-2.5 pr-7 text-sm text-slate-100"
+          >
+            {tag}
+
+            <X
+              size={16}
+              className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default function DashboardAddPage() {
   const modelCategoryObject = getEnumObject(ModelSelectFieldEnum);
@@ -27,7 +79,7 @@ export default function DashboardAddPage() {
         <CardContent>
           <form>
             <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
+              <div className="flex flex-col space-y-4">
                 <Label htmlFor="name" required>
                   Name
                 </Label>
@@ -40,7 +92,7 @@ export default function DashboardAddPage() {
                   fields={modelCategoryObject}
                 />
               ))}
-              <div className="flex flex-col space-y-1.5">
+              <div className="flex flex-col space-y-4">
                 <Label
                   htmlFor="image"
                   className="grid aspect-square w-full cursor-pointer place-items-center rounded-md border"
@@ -54,10 +106,7 @@ export default function DashboardAddPage() {
                 </Label>
               </div>
 
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="tags">Tags</Label>
-                <Input id="tags" type="text" placeholder="Name of your image" />
-              </div>
+              <InputSeveral />
             </div>
           </form>
         </CardContent>
