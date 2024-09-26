@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 interface LabelProps
   extends React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>,
     VariantProps<typeof labelVariants> {
-  flags?: "optional" | "required";
+  required?: boolean;
 }
 
 const labelVariants = cva(
@@ -26,15 +26,8 @@ const Label = React.forwardRef<
     {...props}
   >
     {props.children}
-    {props.flags && (
-      <span
-        className={cn("ml-px text-muted-foreground", {
-          "text-red-500": props.flags === "required",
-          "text-slate-500": props.flags === "optional",
-        })}
-      >
-        {props.flags === "required" ? "*" : "optional"}
-      </span>
+    {props.required && (
+      <span className="ml-px text-muted-foreground text-red-500">*</span>
     )}
   </LabelPrimitive.Root>
 ));
