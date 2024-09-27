@@ -3,7 +3,7 @@ const MAX_FILE_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
 
-export const imageFormSchema = z.object({
+export const ImageFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }).max(32, { message: "Name is too long" }),
   category: z.string().min(1, { message: "Category is required" }).max(32, { message: "Category is too long" }),
   gallery: z.string().min(1, { message: "Gallery is required" }).max(32, { message: "Gallery is too long" }),
@@ -19,4 +19,4 @@ export const imageFormSchema = z.object({
   tags: z.string().optional().array().max(5),
 });
 
-export type ImageFormData = z.infer<typeof imageFormSchema>;
+export type ImageFormData = z.infer<typeof ImageFormSchema>;
