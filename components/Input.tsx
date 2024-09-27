@@ -1,8 +1,8 @@
 "use client";
 
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useId, useState } from "react";
 import Image from "next/image";
-import { cn, generateId } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Check, ImageIcon, X } from "lucide-react";
@@ -17,7 +17,7 @@ type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 interface BaseVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
 
 const BaseVariant = forwardRef<HTMLInputElement, BaseVariantProps>(({ title, placeholder }, ref) => {
-  const uniqueId = generateId(title);
+  const uniqueId = useId();
 
   return (
     <div className="flex flex-col space-y-4" ref={ref}>
@@ -37,7 +37,7 @@ const SeveralVariant = forwardRef<HTMLInputElement, SeveralVariantProps>(({ titl
   const [several, setSeveral] = useState<Array<string>>([]);
   const [value, setValue] = useState("");
 
-  const uniqueId = generateId(title);
+  const uniqueId = useId();
 
   return (
     <div className="flex flex-col space-y-4" ref={ref}>
@@ -89,7 +89,7 @@ interface ImageVariantProps extends WithRequired<VariantProps<typeof Input>, "ti
 const ImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title }, ref) => {
   const [image, setImage] = useState<File>();
 
-  const uniqueId = generateId(title);
+  const uniqueId = useId();
   return (
     <div className="flex flex-col space-y-4" ref={ref}>
       <Label required className="capitalize">
