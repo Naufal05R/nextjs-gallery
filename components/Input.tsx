@@ -188,11 +188,24 @@ const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, f
 
 SelectVariant.displayName = "SelectVariant";
 
-const Component = {
+const Variant = {
   Base: BaseVariant,
   Several: SeveralVariant,
   Image: ImageVariant,
   Select: SelectVariant,
+};
+
+export type InputVariantType = keyof typeof Variant;
+
+export interface InputComponentProps extends CustomInputProps {
+  model: InputVariantType;
+  title: string;
+}
+
+const Component = ({ model, ...props }: InputComponentProps) => {
+  const Rendered = Variant[model];
+
+  return <Rendered {...props} />;
 };
 
 export default Component;
