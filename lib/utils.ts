@@ -14,3 +14,7 @@ export function getEnumObject<E extends Enum<E>>(value: E) {
 export function generateId(prefix: string) {
   return `${prefix}_${crypto.randomUUID()}`;
 }
+
+export function getExtension(filename: string) {
+  return filename.split(".").pop();
+}
