@@ -1,15 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  File,
-  ListFilter,
-  MoreHorizontal,
-  Package2,
-  PanelLeft,
-  PlusCircle,
-  Search,
-  Settings,
-} from "lucide-react";
+import { File, ListFilter, MoreHorizontal, Package2, PanelLeft, PlusCircle, Search, Settings } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,14 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -39,28 +23,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import React from "react";
 import { dashboardNav } from "@/constants/navigation";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 export const description =
   "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.";
 
 // bg-accent text-accent-foreground
-
+  
 export default function DashboardPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -159,11 +133,7 @@ export default function DashboardPage() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
+              <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                 <Image
                   src="/placeholder-user.jpg"
                   width={36}
@@ -182,6 +152,9 @@ export default function DashboardPage() {
               <DropdownMenuItem>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="nature">
@@ -198,35 +171,25 @@ export default function DashboardPage() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="h-8 gap-1">
                       <ListFilter className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Filter
-                      </span>
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Filter</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
-                      Active
-                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked>Active</DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Archived
-                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Button size="sm" variant="outline" className="h-8 gap-1">
                   <File className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Export
-                  </span>
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Export</span>
                 </Button>
                 <Button size="sm" className="h-8 gap-1" asChild>
                   <Link href="/dashboard/add">
                     <PlusCircle className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                      Add Image
-                    </span>
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Image</span>
                   </Link>
                 </Button>
               </div>
@@ -235,9 +198,7 @@ export default function DashboardPage() {
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <CardTitle>Products</CardTitle>
-                  <CardDescription>
-                    Manage your products and view their sales performance.
-                  </CardDescription>
+                  <CardDescription>Manage your products and view their sales performance.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -248,15 +209,9 @@ export default function DashboardPage() {
                         </TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Price
-                        </TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Total Sales
-                        </TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Created at
-                        </TableHead>
+                        <TableHead className="hidden md:table-cell">Price</TableHead>
+                        <TableHead className="hidden md:table-cell">Total Sales</TableHead>
+                        <TableHead className="hidden md:table-cell">Created at</TableHead>
                         <TableHead>
                           <span className="sr-only">Actions</span>
                         </TableHead>
@@ -268,35 +223,23 @@ export default function DashboardPage() {
                           <TableCell className="hidden sm:table-cell">
                             <Image
                               alt="Product image"
-                              className="aspect-square rounded-md object-cover bg-slate-200"
+                              className="aspect-square rounded-md bg-slate-200 object-cover"
                               height="64"
                               src="/placeholder.svg"
                               width="64"
                             />
                           </TableCell>
-                          <TableCell className="font-medium">
-                            Laser Lemonade Machine
-                          </TableCell>
+                          <TableCell className="font-medium">Laser Lemonade Machine</TableCell>
                           <TableCell>
                             <Badge variant="outline">Draft</Badge>
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            $499.99
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            25
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-07-12 10:42 AM
-                          </TableCell>
+                          <TableCell className="hidden md:table-cell">$499.99</TableCell>
+                          <TableCell className="hidden md:table-cell">25</TableCell>
+                          <TableCell className="hidden md:table-cell">2023-07-12 10:42 AM</TableCell>
                           <TableCell>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
+                                <Button aria-haspopup="true" size="icon" variant="ghost">
                                   <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">Toggle menu</span>
                                 </Button>
@@ -315,8 +258,7 @@ export default function DashboardPage() {
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                    products
+                    Showing <strong>1-10</strong> of <strong>32</strong> products
                   </div>
                 </CardFooter>
               </Card>
