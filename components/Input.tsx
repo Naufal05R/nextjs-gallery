@@ -8,12 +8,13 @@ import { Input } from "./ui/input";
 import { Check, ImageIcon, X } from "lucide-react";
 import { VariantProps } from "class-variance-authority";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { frameworks } from "@/constants/framework";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ModelSelectFieldEnum } from "@/constants/enum";
+import { wrapper } from "@/lib/styles";
 
 export interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {
   fields?: Array<string>;
+  entries?: Array<string>;
 }
 
 type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
@@ -24,11 +25,11 @@ const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, pla
   const uniqueId = useId();
 
   return (
-    <div className="flex flex-col space-y-4" ref={ref}>
+    <div className={cn(wrapper.input)} ref={ref}>
       <Label htmlFor={uniqueId} required className="capitalize">
         {title}
       </Label>
-      <Input placeholder={placeholder} id={uniqueId} type="text" />
+      <Input id={uniqueId} name={title} type="text" placeholder={placeholder} />
     </div>
   );
 });
@@ -44,10 +45,11 @@ const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, 
   const uniqueId = useId();
 
   return (
-    <div className="flex flex-col space-y-4" ref={ref}>
+    <div className={cn(wrapper.input)} ref={ref}>
       <Label htmlFor={uniqueId} className="capitalize">
         {title}
       </Label>
+      <Input name={title} type="hidden" value={several} />
       <Input
         id={uniqueId}
         value={value}
@@ -73,9 +75,7 @@ const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, 
             {inputted}
 
             <X
-              onClick={() => {
-                setSeveral(several.filter((i) => i !== inputted));
-              }}
+              onClick={() => setSeveral(several.filter((i) => i !== inputted))}
               size={16}
               className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
             />
@@ -95,7 +95,7 @@ const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title }, 
 
   const uniqueId = useId();
   return (
-    <div className="flex flex-col space-y-4" ref={ref}>
+    <div className={cn(wrapper.input)} ref={ref}>
       <Label required className="capitalize">
         {title}
       </Label>
@@ -105,6 +105,7 @@ const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title }, 
       >
         <Input
           id={uniqueId}
+          name={title}
           type="file"
           hidden
           accept="image/jpg, image/jpeg, image/png"
@@ -129,36 +130,57 @@ ImageVariant.displayName = "ImageVariant";
 
 // interface SelectVariantProps extends CustomInputProps {}
 
-const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, fields }, ref) => {
+const SelectFieldDropdown = ({
+  id,
+  title,
+  type,
+  entries,
+}: {
+  id: string;
+  title: string;
+  type: ModelSelectFieldType;
+  entries?: Array<string>;
+}) => {
+  switch (type) {
+    case "void":
+      return <Input id={id} name={title} type="text" placeholder={`My New ${title}`} />;
+    default:
+      return (
+        <Select name={title} disabled={!type}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={`Select ${title}`} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {entries?.length ? (
+                entries.map((entry) => (
+                  <SelectItem key={entry} value={entry} className="capitalize">
+                    {entry}
+                  </SelectItem>
+                ))
+              ) : (
+                <div className="flex w-full items-center px-2 py-1.5 text-sm text-slate-500">
+                  <p>
+                    You don&apos;t have any existing <span className="capitalize">{title}</span>
+                  </p>
+                  <X className="ml-auto" size={16} />
+                </div>
+              )}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      );
+  }
+};
+
+const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, fields, entries }, ref) => {
   const [type, setType] = useState<ModelSelectFieldType>("");
 
-  const SelectFieldDropdown = ({ id, title, type }: { id: string; title: string; type: ModelSelectFieldType }) => {
-    switch (type) {
-      case "void":
-        return <Input id={id} type="text" placeholder={`My New ${title}`} />;
-      default:
-        return (
-          <Select disabled={!type}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={`Select ${title}`} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {frameworks.map((framework) => (
-                  <SelectItem key={framework.value} value={framework.value}>
-                    {framework.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        );
-    }
-  };
+  const uniqueId = useId();
 
   return (
-    <div className="flex flex-col space-y-4" ref={ref}>
-      <Label required className="capitalize">
+    <div className={cn(wrapper.input)} ref={ref}>
+      <Label htmlFor={uniqueId} required className="capitalize">
         {title}
       </Label>
       <RadioGroup
@@ -181,7 +203,7 @@ const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, f
         })}
       </RadioGroup>
 
-      <SelectFieldDropdown id={title.toLowerCase()} title={title} type={type} />
+      <SelectFieldDropdown id={title.toLowerCase()} title={title} type={type} entries={entries} />
     </div>
   );
 });
