@@ -12,11 +12,15 @@ import { frameworks } from "@/constants/framework";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 
+export interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {
+  fields?: Array<string>;
+}
+
 type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
-interface BaseVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
+// interface BaseVariantProps extends CustomInputProps {}
 
-const BaseVariant = forwardRef<HTMLInputElement, BaseVariantProps>(({ title, placeholder }, ref) => {
+const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder }, ref) => {
   const uniqueId = useId();
 
   return (
@@ -31,9 +35,9 @@ const BaseVariant = forwardRef<HTMLInputElement, BaseVariantProps>(({ title, pla
 
 BaseVariant.displayName = "BaseVariant";
 
-interface SeveralVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
+// interface SeveralVariantProps extends CustomInputProps {}
 
-const SeveralVariant = forwardRef<HTMLInputElement, SeveralVariantProps>(({ title, placeholder }, ref) => {
+const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder }, ref) => {
   const [several, setSeveral] = useState<Array<string>>([]);
   const [value, setValue] = useState("");
 
@@ -84,9 +88,9 @@ const SeveralVariant = forwardRef<HTMLInputElement, SeveralVariantProps>(({ titl
 
 SeveralVariant.displayName = "SeveralVariant";
 
-interface ImageVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {}
+// interface ImageVariantProps extends CustomInputProps {}
 
-const ImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title }, ref) => {
+const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title }, ref) => {
   const [image, setImage] = useState<File>();
 
   const uniqueId = useId();
@@ -123,11 +127,9 @@ const ImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title },
 
 ImageVariant.displayName = "ImageVariant";
 
-interface SelectVariantProps extends WithRequired<VariantProps<typeof Input>, "title"> {
-  fields: Array<string>;
-}
+// interface SelectVariantProps extends CustomInputProps {}
 
-const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({ title, fields }, ref) => {
+const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, fields }, ref) => {
   const [type, setType] = useState<ModelSelectFieldType>("");
 
   const SelectFieldDropdown = ({ id, title, type }: { id: string; title: string; type: ModelSelectFieldType }) => {
@@ -164,7 +166,7 @@ const SelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(({ title,
         className="flex items-center gap-x-4"
         onValueChange={(value: ModelSelectFieldType) => setType(value)}
       >
-        {fields.map((field) => {
+        {fields?.map((field) => {
           return (
             <Label
               key={title + field}
