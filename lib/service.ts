@@ -1,4 +1,5 @@
 import * as Minio from "minio";
+import internal from "stream";
 
 const END_POINT: string = process.env.MINIO_END_POINT || "";
 const SERVER_PORT: number = parseInt(process.env.MINIO_SERVER_PORT || "");
@@ -33,18 +34,12 @@ export const createObject = async ({
 }: {
   bucketName: string;
   objectName: string;
-  objectStream: string;
+  objectStream: internal.Readable | Buffer | string;
   objectSize?: number;
   objectMetaData?: Record<string, unknown>;
 }) => {
   try {
-    const result = await minioClient.putObject(
-      bucketName,
-      objectName,
-      objectStream,
-      objectSize,
-      objectMetaData
-    );
+    const result = await minioClient.putObject(bucketName, objectName, objectStream, objectSize, objectMetaData);
 
     return result;
   } catch (error) {
@@ -64,12 +59,7 @@ export const getObject = async ({
   options?: Record<string, unknown>;
 }) => {
   try {
-    const result = await minioClient.fGetObject(
-      bucketName,
-      objectName,
-      filePath,
-      options
-    );
+    const result = await minioClient.fGetObject(bucketName, objectName, filePath, options);
 
     return result;
   } catch (error) {
@@ -77,13 +67,7 @@ export const getObject = async ({
   }
 };
 
-export const streamObjects = ({
-  bucketName,
-  includeMetadata,
-}: {
-  bucketName: string;
-  includeMetadata?: boolean;
-}) => {
+export const streamObjects = ({ bucketName, includeMetadata }: { bucketName: string; includeMetadata?: boolean }) => {
   const stream: Minio.BucketStream<Minio.BucketItem> = includeMetadata
     ? minioClient.extensions.listObjectsV2WithMetadata(bucketName)
     : minioClient.listObjectsV2(bucketName);
