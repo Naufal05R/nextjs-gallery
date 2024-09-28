@@ -21,21 +21,21 @@ export const createImage = async (formData: FormData) => {
     const uniqueId = generateId("image");
     const fileName = `${uniqueId}.${getExtension(file.name)}`;
 
-    const params: Parameters<typeof createObject>[0] = {
-      bucketName: "nextjs-gallery",
-      objectName: fileName,
-      objectStream: imageBuffer,
-      objectMetaData: {
-        name: rawData.name,
-        category: rawData.category,
-        gallery: rawData.gallery,
-        tags: rawData.tags,
-      },
-    };
+    // const params: Parameters<typeof createObject>[0] = {
+    //   bucketName: "nextjs-gallery",
+    //   objectName: fileName,
+    //   objectStream: imageBuffer,
+    //   objectMetaData: {
+    //     name: rawData.name,
+    //     category: rawData.category,
+    //     gallery: rawData.gallery,
+    //     tags: rawData.tags,
+    //   },
+    // };
 
-    const result = await createObject(params);
+    // const result = await createObject(params);
 
-    return result;
+    // return result;
   } catch (error) {
     console.log(error);
     throw error;
