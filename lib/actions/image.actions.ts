@@ -1,8 +1,8 @@
 "use server";
 
 import { imageFormFields } from "@/constants/form";
-import { createObject } from "./service";
-import { generateId, getExtension } from "./utils";
+import { createObject } from "../service";
+import { generateId, getExtension } from "../utils";
 
 export const createImage = async (formData: FormData) => {
   const rawData = imageFormFields
