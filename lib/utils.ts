@@ -19,7 +19,7 @@ export function getExtension(filename: string) {
   return filename.split(".").pop();
 }
 
-export function handleError(error: unknown) {
+export function handlingError(error: unknown) {
   if (error instanceof Error) {
     console.error(error.message);
     throw new Error(`Error: ${error.message}`);
