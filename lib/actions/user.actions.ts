@@ -2,7 +2,7 @@
 
 import { User } from "@prisma/client";
 import { prisma } from "../prisma";
-import { handleError } from "../utils";
+import { handlingError } from "../utils";
 
 export const createUser = async (user: User) => {
   try {
@@ -10,6 +10,6 @@ export const createUser = async (user: User) => {
 
     return newUser;
   } catch (error) {
-    handleError(error);
+    handlingError(error);
   }
 };
