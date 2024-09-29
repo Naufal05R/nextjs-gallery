@@ -1,4 +1,5 @@
 import { createClerkClient } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
 
 const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
 
@@ -12,4 +13,9 @@ export async function POST(request: Request) {
   if (!WEBHOOK_SECRET_CLERK) {
     throw new Error("Please add WEBHOOK_SECRET_CLERK from Clerk Dashboard to .env or .env.local");
   }
+
+  const headerPayload = headers();
+  const svix_id = headerPayload.get("svix-id");
+  const svix_timestamp = headerPayload.get("svix-timestamp");
+  const svix_signature = headerPayload.get("svix-signature");
 }
