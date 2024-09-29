@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { Button } from "./ui/button";
 import { imageFormFields } from "@/constants/form";
 import Input from "@/components/Input";
-import { createImage } from "@/lib/actions";
+import { createImage } from "@/lib/actions/image.actions";
 
 const ImageVariant = forwardRef(() => {
   return (
