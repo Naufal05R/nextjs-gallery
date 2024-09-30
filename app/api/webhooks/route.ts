@@ -1,4 +1,5 @@
 import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
+import { User } from "@prisma/client";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 
@@ -44,7 +45,16 @@ export async function POST(request: Request) {
   const { id } = event.data;
   const eventType = event.type;
 
-  if (eventType === 'user.created') {
-    
+  if (eventType === "user.created") {
+    const { id, username, email_addresses, image_url, first_name, last_name } = event.data;
+
+    const user: User = {
+      id,
+      username: username!,
+      email: email_addresses[0].email_address,
+      avatarUrl: image_url,
+      firstName: first_name,
+      lastName: last_name,
+    };
   }
 }
