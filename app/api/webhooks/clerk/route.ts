@@ -59,16 +59,20 @@ export async function POST(request: Request) {
       lastName: last_name,
     };
 
-    const newUser = await createUser(user);
+    return NextResponse.json({ message: "ok", user: user });
 
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser.id,
-        },
-      });
-    }
+    // console.log(user);
 
-    return NextResponse.json({ message: "ok", user: newUser });
+    // const newUser = await createUser(user);
+
+    // if (newUser) {
+    //   await clerkClient.users.updateUserMetadata(id, {
+    //     publicMetadata: {
+    //       userId: newUser.id,
+    //     },
+    //   });
+    // }
+
+    // return NextResponse.json({ message: "ok", user: newUser });
   }
 }
