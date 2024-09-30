@@ -12,7 +12,6 @@ const clerkClient = createClerkClient({
 });
 
 export async function POST(request: Request) {
-  console.log("executed");
   const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!CLERK_WEBHOOK_SECRET) {
@@ -60,11 +59,7 @@ export async function POST(request: Request) {
       lastName: last_name,
     };
 
-    console.log(user);
-
     const newUser = await createUser(user);
-
-    console.log(newUser);
 
     if (newUser) {
       await clerkClient.users.updateUserMetadata(id, {
