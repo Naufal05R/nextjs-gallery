@@ -1,6 +1,8 @@
+import { createUser } from "@/lib/actions/user.actions";
+import { User } from "@/types/user";
 import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
-import { User } from "@prisma/client";
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
 const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
@@ -56,5 +58,17 @@ export async function POST(request: Request) {
       firstName: first_name,
       lastName: last_name,
     };
+
+    const newUser = await createUser(user);
+
+    if (newUser) {
+      await clerkClient.users.updateUserMetadata(id, {
+        publicMetadata: {
+          userId: newUser.id,
+        },
+      });
+    }
+
+    return NextResponse.json({ message: "ok", user: newUser });
   }
 }
