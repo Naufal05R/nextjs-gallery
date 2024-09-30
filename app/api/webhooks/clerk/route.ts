@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     return new Response("Error occured.", { status: 400 });
   }
 
-  // const { id } = event.data;
+  const { id } = event.data;
   const eventType = event.type;
 
   if (eventType === "user.created") {
@@ -97,4 +97,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "OK", user: deletedUser });
   }
+
+  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
+  console.log("Webhook body:", body);
+
+  return new Response("", { status: 200 });
 }
