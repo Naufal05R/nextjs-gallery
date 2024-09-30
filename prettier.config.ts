@@ -1,4 +1,4 @@
-import tailwindcss from "prettier-plugin-tailwindcss";
+import * as tailwindcss from "prettier-plugin-tailwindcss"
 
 const config = {
   plugins: [tailwindcss],
