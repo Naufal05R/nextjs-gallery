@@ -29,4 +29,15 @@ export async function POST(request: Request) {
 
   const webhook = new Webhook(CLERK_WEBHOOK_SECRET);
   let event: WebhookEvent;
+
+  try {
+    event = webhook.verify(body, {
+      "svix-id": svix_id,
+      "svix-timestamp": svix_timestamp,
+      "svix-signature": svix_signature,
+    }) as WebhookEvent;
+  } catch (error) {
+    console.error("Error verifying webhook", error);
+    return new Response("Error occured.", { status: 400 });
+  }
 }
