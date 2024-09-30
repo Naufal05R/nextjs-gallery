@@ -31,7 +31,23 @@ export const imageFormFields: Array<InputComponentProps> = [
   },
 ];
 
-export const authFormFields: Array<InputComponentProps> = [
+export const signInFormFields: Array<InputComponentProps> = [
+  {
+    model: "Base",
+    title: "email or username",
+    placeholder: "user_name / email+clerk_test@example.com",
+    required: true,
+  },
+  {
+    type: "password",
+    model: "Base",
+    title: "password",
+    placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
+    required: true,
+  },
+];
+
+export const signUpFormFields: Array<InputComponentProps> = [
   {
     model: "Base",
     title: "first name",
@@ -51,7 +67,7 @@ export const authFormFields: Array<InputComponentProps> = [
   {
     model: "Base",
     title: "username",
-    placeholder: "first_user",
+    placeholder: "user_name",
     required: true,
   },
   {
