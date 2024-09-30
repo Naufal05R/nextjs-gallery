@@ -21,12 +21,12 @@ type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
 // interface BaseVariantProps extends CustomInputProps {}
 
-const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder }, ref) => {
+const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder, required }, ref) => {
   const uniqueId = useId();
 
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required className="capitalize">
+      <Label htmlFor={uniqueId} required={required} className="capitalize">
         {title}
       </Label>
       <Input id={uniqueId} name={title} type="text" placeholder={placeholder} />
@@ -38,7 +38,7 @@ BaseVariant.displayName = "BaseVariant";
 
 // interface SeveralVariantProps extends CustomInputProps {}
 
-const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder }, ref) => {
+const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder, required }, ref) => {
   const [several, setSeveral] = useState<Array<string>>([]);
   const [value, setValue] = useState("");
 
@@ -46,7 +46,7 @@ const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, 
 
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} className="capitalize">
+      <Label htmlFor={uniqueId} required={required} className="capitalize">
         {title}
       </Label>
       <Input name={title} type="hidden" value={several} />
@@ -90,13 +90,13 @@ SeveralVariant.displayName = "SeveralVariant";
 
 // interface ImageVariantProps extends CustomInputProps {}
 
-const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title }, ref) => {
+const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, required }, ref) => {
   const [image, setImage] = useState<File>();
 
   const uniqueId = useId();
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label required className="capitalize">
+      <Label required={required} className="capitalize">
         {title}
       </Label>
       <Label
@@ -173,14 +173,14 @@ const SelectFieldDropdown = ({
   }
 };
 
-const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, fields, entries }, ref) => {
+const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, required, fields, entries }, ref) => {
   const [type, setType] = useState<ModelSelectFieldType>("");
 
   const uniqueId = useId();
 
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required className="capitalize">
+      <Label htmlFor={uniqueId} required={required} className="capitalize">
         {title}
       </Label>
       <RadioGroup
