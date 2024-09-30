@@ -15,3 +15,5 @@ export const createUser = async (user: User) => {
 };
 
 export const getUserById = async () => {};
+
+export const updateUser = async () => {}
