@@ -42,9 +42,9 @@ SignInVariant.displayName = "SignInVariant";
 
 const SignUpVariant = forwardRef(() => {
   return (
-    <form /* action={createImage} */>
+    <form /* action={createImage} */ className="flex flex-wrap justify-between">
       {signUpFormFields.map(({ ...props }, i) => (
-      <Input key={i} {...props} />
+        <Input key={i} {...props} />
       ))}
       <Button className="mt-8 w-full">Sign Up</Button>
       <p className="mt-4 text-sm">
