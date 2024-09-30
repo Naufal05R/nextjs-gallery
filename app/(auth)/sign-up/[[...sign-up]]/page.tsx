@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Form from "@/components/Form";
+import { FormSignUpVariant } from "@/components/Form";
 
 export default function Page() {
   return (
@@ -9,7 +9,7 @@ export default function Page() {
         <CardDescription>Create a new Account to get into Our Application and access all features.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form.SignUp />
+        <FormSignUpVariant />
       </CardContent>
     </Card>
   );
