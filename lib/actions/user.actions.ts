@@ -33,7 +33,9 @@ export const updateUser = async (userId: string, user: User) => {
     if (!updatedUser) throw new Error("User update failed");
 
     return updatedUser;
-  } catch (error) {}
+  } catch (error) {
+    handlingError(error);
+  }
 };
 
 export const deleteUser = async () => {};
