@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Form from "@/components/Form";
+import { FormSignInVariant } from "@/components/Form";
 
 export default function Page() {
   return (
@@ -9,7 +9,7 @@ export default function Page() {
         <CardDescription>Welcome back! Please enter your credentials to access your account.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form.SignIn />
+        <FormSignInVariant />
       </CardContent>
     </Card>
   );
