@@ -1,4 +1,4 @@
-import { createUser } from "@/lib/actions/user.actions";
+import { createUser, updateUser } from "@/lib/actions/user.actions";
 import { User } from "@/types/user";
 import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
@@ -70,8 +70,23 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ message: "ok", user: newUser });
+    return NextResponse.json({ message: "OK", user: newUser });
   }
 
-  if (eventType === "user.updated") {}
+  if (eventType === "user.updated") {
+    const { id, username, email_addresses, image_url, first_name, last_name } = event.data;
+
+    const user: User = {
+      id,
+      username: username!,
+      email: email_addresses[0].email_address,
+      avatarUrl: image_url,
+      firstName: first_name,
+      lastName: last_name,
+    };
+
+    const updatedUser = await updateUser(id, user);
+
+    return NextResponse.json({ message: "OK", user: updatedUser });
+  }
 }
