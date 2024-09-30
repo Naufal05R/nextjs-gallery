@@ -27,7 +27,11 @@ export const getUserById = async (userId: string) => {
 };
 
 export const updateUser = async (userId: string, user: User) => {
-  
+  try {
+    
+  } catch (error) {
+    
+  }
 };
 
 export const deleteUser = async () => {};
