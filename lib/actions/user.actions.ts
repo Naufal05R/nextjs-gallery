@@ -39,5 +39,9 @@ export const updateUser = async (userId: string, user: User) => {
 };
 
 export const deleteUser = async (userId: string) => {
-  
+  try {
+    
+  } catch (error) {
+    
+  }
 };
