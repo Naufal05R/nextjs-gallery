@@ -6,7 +6,7 @@ export default function Page() {
     <Card className="w-full max-w-96">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
-        <CardDescription>Create a new Account to access all feature.</CardDescription>
+        <CardDescription>Welcome back! Please enter your credentials to access your account.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form.SignIn />
