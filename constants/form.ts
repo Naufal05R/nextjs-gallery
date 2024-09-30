@@ -34,16 +34,6 @@ export const imageFormFields: Array<InputComponentProps> = [
 export const authFormFields: Array<InputComponentProps> = [
   {
     model: "Base",
-    title: "username",
-    placeholder: "first_user",
-  },
-  {
-    model: "Base",
-    title: "email",
-    placeholder: "first_user+clerk_test@example.com",
-  },
-  {
-    model: "Base",
     title: "first name",
     placeholder: "John",
   },
@@ -51,5 +41,22 @@ export const authFormFields: Array<InputComponentProps> = [
     model: "Base",
     title: "first name",
     placeholder: "John Doe",
+  },
+  {
+    model: "Base",
+    title: "username",
+    placeholder: "first_user",
+  },
+  {
+    type: "password",
+    model: "Base",
+    title: "password",
+    placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
+  },
+  {
+    type: "password",
+    model: "Base",
+    title: "confirmation password",
+    placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
   },
 ];
