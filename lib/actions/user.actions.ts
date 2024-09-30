@@ -28,10 +28,12 @@ export const getUserById = async (userId: string) => {
 
 export const updateUser = async (userId: string, user: User) => {
   try {
-    
-  } catch (error) {
-    
-  }
+    const updatedUser = await prisma.user.update({ where: { id: userId }, data: user });
+
+    if (!updatedUser) throw new Error("User update failed");
+
+    return updatedUser;
+  } catch (error) {}
 };
 
 export const deleteUser = async () => {};
