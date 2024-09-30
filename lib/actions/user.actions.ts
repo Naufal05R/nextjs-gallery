@@ -4,6 +4,7 @@ import { User, UserId } from "@/types/user";
 import { prisma } from "../prisma";
 import { handlingError } from "../utils";
 import { revalidatePath } from "next/cache";
+import { auth } from "@clerk/nextjs/server";
 
 export const createUser = async (user: User) => {
   try {
@@ -43,7 +44,7 @@ export const deleteUser = async (userId: UserId) => {
   try {
     const userToDelete = await prisma.user.findUnique({ where: { id: userId } });
 
-    if (!userToDelete) throw new Error("User delete failed");
+    if (!auth().userId || !userToDelete || userToDelete?.id !== auth().userId) throw new Error("User delete failed");
 
     const deletedUser = await prisma.user.delete({ where: { id: userId } });
     revalidatePath("/");
