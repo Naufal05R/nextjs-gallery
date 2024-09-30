@@ -13,6 +13,7 @@ import { ModelSelectFieldEnum } from "@/constants/enum";
 import { wrapper } from "@/lib/styles";
 
 export interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {
+  className?: string;
   fields?: Array<string>;
   entries?: Array<string>;
 }
@@ -21,18 +22,20 @@ type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
 // interface BaseVariantProps extends CustomInputProps {}
 
-const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder, required }, ref) => {
-  const uniqueId = useId();
+const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(
+  ({ title, placeholder, className, required }, ref) => {
+    const uniqueId = useId();
 
-  return (
-    <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required={required} className="capitalize">
-        {title}
-      </Label>
-      <Input id={uniqueId} name={title} type="text" placeholder={placeholder} />
-    </div>
-  );
-});
+    return (
+      <div className={cn(wrapper.input, className)} ref={ref}>
+        <Label htmlFor={uniqueId} required={required} className="capitalize">
+          {title}
+        </Label>
+        <Input id={uniqueId} name={title} type="text" placeholder={placeholder} />
+      </div>
+    );
+  },
+);
 
 BaseVariant.displayName = "BaseVariant";
 
