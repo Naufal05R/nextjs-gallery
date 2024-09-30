@@ -30,9 +30,9 @@ export const getUserById = async (userId: UserId) => {
 
 export const updateUser = async (userId: UserId, user: User) => {
   try {
-    const updatedUser = await prisma.user.update({ where: { id: userId }, data: user });
+    if (userId !== auth().userId) throw new Error("User update failed");
 
-    if (!updatedUser) throw new Error("User update failed");
+    const updatedUser = await prisma.user.update({ where: { id: userId }, data: user });
 
     return updatedUser;
   } catch (error) {
