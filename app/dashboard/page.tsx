@@ -30,9 +30,6 @@ import React from "react";
 import { dashboardNav } from "@/constants/navigation";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 
-export const description =
-  "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.";
-
 // bg-accent text-accent-foreground
 
 export default function DashboardPage() {

@@ -1,7 +1,7 @@
 import * as z from "zod";
 const MAX_FILE_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
+// const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
 
 export const ImageFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }).max(32, { message: "Name is too long" }),

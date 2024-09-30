@@ -2,11 +2,11 @@ import { forwardRef } from "react";
 import { Button } from "./ui/button";
 import { imageFormFields } from "@/constants/form";
 import Input from "@/components/Input";
-import { createImage } from "@/lib/actions/image.actions";
+// import { createImage } from "@/lib/actions/image.actions";
 
 const ImageVariant = forwardRef(() => {
   return (
-    <form action={createImage}>
+    <form /* action={createImage} */>
       {imageFormFields.map(({ ...props }, i) => (
         <Input key={i} {...props} />
       ))}
