@@ -1,15 +1,15 @@
-import { createUser } from "@/lib/actions/user.actions";
+// import { createUser } from "@/lib/actions/user.actions";
 import { User } from "@/types/user";
-import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
+import { /* createClerkClient, */ WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
-const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
+// const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
 
-const clerkClient = createClerkClient({
-  secretKey: CLERK_SECRET_KEY,
-});
+// const clerkClient = createClerkClient({
+//   secretKey: CLERK_SECRET_KEY,
+// });
 
 export async function POST(request: Request) {
   const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     return new Response("Error occured.", { status: 400 });
   }
 
-  const { id } = event.data;
+  // const { id } = event.data;
   const eventType = event.type;
 
   if (eventType === "user.created") {
