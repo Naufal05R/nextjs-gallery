@@ -30,3 +30,26 @@ export const imageFormFields: Array<InputComponentProps> = [
     placeholder: "Add tags to image (separate it with comma)",
   },
 ];
+
+export const authFormFields: Array<InputComponentProps> = [
+  {
+    model: "Base",
+    title: "username",
+    placeholder: "first_user",
+  },
+  {
+    model: "Base",
+    title: "email",
+    placeholder: "first_user+clerk_test@example.com",
+  },
+  {
+    model: "Base",
+    title: "first name",
+    placeholder: "John",
+  },
+  {
+    model: "Base",
+    title: "first name",
+    placeholder: "John Doe",
+  },
+];
