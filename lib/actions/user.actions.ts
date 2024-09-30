@@ -21,7 +21,9 @@ export const getUserById = async (userId: string) => {
     if (!selectedUser) throw new Error("User not found");
 
     return selectedUser;
-  } catch (error) {}
+  } catch (error) {
+    handlingError(error);
+  }
 };
 
 export const updateUser = async () => {};
