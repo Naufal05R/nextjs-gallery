@@ -39,24 +39,33 @@ export const authFormFields: Array<InputComponentProps> = [
   },
   {
     model: "Base",
-    title: "first name",
-    placeholder: "John Doe",
+    title: "last name",
+    placeholder: "Doe",
+  },
+  {
+    model: "Base",
+    title: "email",
+    placeholder: "email+clerk_test@example.com",
+    required: true,
   },
   {
     model: "Base",
     title: "username",
     placeholder: "first_user",
+    required: true,
   },
   {
     type: "password",
     model: "Base",
     title: "password",
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
+    required: true,
   },
   {
     type: "password",
     model: "Base",
     title: "confirmation password",
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
+    required: true,
   },
 ];
