@@ -20,8 +20,25 @@ const ImageVariant = forwardRef(() => {
 
 ImageVariant.displayName = "ImageVariant";
 
+const SignInVariant = forwardRef(() => {
+  return (
+    <form /* action={createImage} */>
+      {imageFormFields.map(({ ...props }, i) => (
+        <Input key={i} {...props} />
+      ))}
+      <div className="mt-8 flex items-center gap-x-4">
+        <Button variant="outline">Cancel</Button>
+        <Button>Create</Button>
+      </div>
+    </form>
+  );
+});
+
+SignInVariant.displayName = "SignInVariant";
+
 const Component = {
   Image: ImageVariant,
+  SignIn: SignInVariant,
 };
 
 export default Component;
