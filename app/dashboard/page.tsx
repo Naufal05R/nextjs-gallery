@@ -34,7 +34,7 @@ export const description =
   "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.";
 
 // bg-accent text-accent-foreground
-  
+
 export default function DashboardPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -112,7 +112,7 @@ export default function DashboardPage() {
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               {Array.from({ length: 3 }).map((_, i) => (
-                <React.Fragment key={1}>
+                <React.Fragment key={i}>
                   <BreadcrumbSeparator hidden={i === 0} />
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                 <Image
-                  src="/placeholder-user.jpg"
+                  src="/placeholder-user.jpeg"
                   width={36}
                   height={36}
                   alt="Avatar"
