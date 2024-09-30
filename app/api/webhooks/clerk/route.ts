@@ -72,4 +72,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "ok", user: newUser });
   }
+
+  if (eventType === "user.updated") {}
 }
