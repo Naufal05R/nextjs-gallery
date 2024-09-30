@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields } from "@/constants/form";
 import Input from "@/components/Input";
+import Link from "next/link";
 // import { createImage } from "@/lib/actions/image.actions";
 
 const ImageVariant = forwardRef(() => {
@@ -26,7 +27,13 @@ const SignInVariant = forwardRef(() => {
       {signInFormFields.map(({ ...props }, i) => (
         <Input key={i} {...props} />
       ))}
-      <Button className="w-full mt-8">Sign In</Button>
+      <Button className="mt-8 w-full">Sign In</Button>
+      <p className="mt-4 text-sm">
+        Don&apos;t have an account?{" "}
+        <Link href="/sign-up" className="text-blue-500 underline-offset-2 hover:underline">
+          Sign Up
+        </Link>
+      </p>
     </form>
   );
 });
