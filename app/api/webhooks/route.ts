@@ -22,4 +22,9 @@ export async function POST(request: Request) {
   if (!svix_id || !svix_timestamp || !svix_signature) {
     return new Response("Error occured -- no svix headers", { status: 400 });
   }
+
+  const payload = await request.json();
+  const body = JSON.stringify(payload);
+
+  
 }
