@@ -26,6 +26,8 @@ export const getUserById = async (userId: string) => {
   }
 };
 
-export const updateUser = async () => {};
+export const updateUser = async (userId: string, user: User) => {
+  
+};
 
 export const deleteUser = async () => {};
