@@ -49,5 +49,7 @@ export const deleteUser = async (userId: string) => {
     revalidatePath("/");
 
     return deletedUser ? deletedUser : null;
-  } catch (error) {}
+  } catch (error) {
+    handlingError(error);
+  }
 };
