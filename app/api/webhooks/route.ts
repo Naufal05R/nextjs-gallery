@@ -44,5 +44,7 @@ export async function POST(request: Request) {
   const { id } = event.data;
   const eventType = event.type;
 
-  
+  if (eventType === 'user.created') {
+    
+  }
 }
