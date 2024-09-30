@@ -40,4 +40,9 @@ export async function POST(request: Request) {
     console.error("Error verifying webhook", error);
     return new Response("Error occured.", { status: 400 });
   }
+
+  const { id } = event.data;
+  const eventType = event.type;
+
+  
 }
