@@ -38,7 +38,7 @@ export const imageFormFields: Array<InputComponentProps> = [
 export const signInFormFields: Array<InputComponentProps> = [
   {
     model: "Base",
-    title: "email or username",
+    title: "email/username",
     placeholder: "user_name / email+clerk_test@example.com",
     required: true,
   },
@@ -56,11 +56,13 @@ export const signUpFormFields: Array<InputComponentProps> = [
     model: "Base",
     title: "first name",
     placeholder: "John",
+    className: "w-[calc(50%-8px)]",
   },
   {
     model: "Base",
     title: "last name",
     placeholder: "Doe",
+    className: "w-[calc(50%-8px)]",
   },
   {
     model: "Base",
