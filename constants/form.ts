@@ -9,20 +9,24 @@ export const imageFormFields: Array<InputComponentProps> = [
     model: "Base",
     title: "name",
     placeholder: "Name of your image",
+    required: true,
   },
   {
     model: "Select",
     title: "category",
     fields: modelEnumObject,
+    required: true,
   },
   {
     model: "Select",
     title: "gallery",
     fields: modelEnumObject,
+    required: true,
   },
   {
     model: "Image",
     title: "image",
+    required: true,
   },
   {
     model: "Several",
