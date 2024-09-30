@@ -1,5 +1,6 @@
-import { createClerkClient } from "@clerk/nextjs/server";
+import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
+import { Webhook } from "svix";
 
 const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
 
@@ -8,10 +9,10 @@ const clerkClient = createClerkClient({
 });
 
 export async function POST(request: Request) {
-  const WEBHOOK_SECRET_CLERK = process.env.WEBHOOK_SECRET_CLERK;
+  const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
-  if (!WEBHOOK_SECRET_CLERK) {
-    throw new Error("Please add WEBHOOK_SECRET_CLERK from Clerk Dashboard to .env or .env.local");
+  if (!CLERK_WEBHOOK_SECRET) {
+    throw new Error("Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local");
   }
 
   const headerPayload = headers();
@@ -26,5 +27,6 @@ export async function POST(request: Request) {
   const payload = await request.json();
   const body = JSON.stringify(payload);
 
-  
+  const webhook = new Webhook(CLERK_WEBHOOK_SECRET);
+  let event: WebhookEvent;
 }
