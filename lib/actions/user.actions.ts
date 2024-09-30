@@ -1,6 +1,6 @@
 "use server";
 
-import { User } from "@prisma/client";
+import { User, UserId } from "@/types/user";
 import { prisma } from "../prisma";
 import { handlingError } from "../utils";
 import { revalidatePath } from "next/cache";
@@ -15,7 +15,7 @@ export const createUser = async (user: User) => {
   }
 };
 
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: UserId) => {
   try {
     const selectedUser = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -27,7 +27,7 @@ export const getUserById = async (userId: string) => {
   }
 };
 
-export const updateUser = async (userId: string, user: User) => {
+export const updateUser = async (userId: UserId, user: User) => {
   try {
     const updatedUser = await prisma.user.update({ where: { id: userId }, data: user });
 
@@ -39,7 +39,7 @@ export const updateUser = async (userId: string, user: User) => {
   }
 };
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: UserId) => {
   try {
     const userToDelete = await prisma.user.findUnique({ where: { id: userId } });
 
