@@ -1,11 +1,14 @@
+"use client";
+
 import { forwardRef } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
 import Input from "@/components/Input";
 import Link from "next/link";
+import { useSignIn } from "@clerk/nextjs";
 // import { createImage } from "@/lib/actions/image.actions";
 
-const ImageVariant = forwardRef(() => {
+export const FormImageVariant = forwardRef(() => {
   return (
     <form /* action={createImage} */>
       {imageFormFields.map(({ ...props }, i) => (
@@ -19,9 +22,11 @@ const ImageVariant = forwardRef(() => {
   );
 });
 
-ImageVariant.displayName = "ImageVariant";
+FormImageVariant.displayName = "ImageVariant";
 
-const SignInVariant = forwardRef(() => {
+export const FormSignInVariant = forwardRef(() => {
+  const {} = useSignIn();
+
   return (
     <form /* action={createImage} */>
       {signInFormFields.map(({ ...props }, i) => (
@@ -38,9 +43,9 @@ const SignInVariant = forwardRef(() => {
   );
 });
 
-SignInVariant.displayName = "SignInVariant";
+FormSignInVariant.displayName = "SignInVariant";
 
-const SignUpVariant = forwardRef(() => {
+export const FormSignUpVariant = forwardRef(() => {
   return (
     <form /* action={createImage} */ className="flex flex-wrap justify-between">
       {signUpFormFields.map(({ ...props }, i) => (
@@ -57,12 +62,4 @@ const SignUpVariant = forwardRef(() => {
   );
 });
 
-SignUpVariant.displayName = "SignUpVariant";
-
-const Component = {
-  Image: ImageVariant,
-  SignIn: SignInVariant,
-  SignUp: SignUpVariant,
-};
-
-export default Component;
+FormSignUpVariant.displayName = "SignUpVariant";
