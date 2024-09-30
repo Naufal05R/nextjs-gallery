@@ -14,8 +14,16 @@ export const createUser = async (user: User) => {
   }
 };
 
-export const getUserById = async () => {};
+export const getUserById = async (userId: string) => {
+  try {
+    const selectedUser = await prisma.user.findUnique({ where: { id: userId } });
 
-export const updateUser = async () => {}
+    if (!selectedUser) throw new Error("User not found");
 
-export const deleteUser = async () => {}
+    return selectedUser;
+  } catch (error) {}
+};
+
+export const updateUser = async () => {};
+
+export const deleteUser = async () => {};
