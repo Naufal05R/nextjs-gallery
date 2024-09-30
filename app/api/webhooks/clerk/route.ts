@@ -12,6 +12,7 @@ import { Webhook } from "svix";
 // });
 
 export async function POST(request: Request) {
+  console.log("executed");
   const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!CLERK_WEBHOOK_SECRET) {
