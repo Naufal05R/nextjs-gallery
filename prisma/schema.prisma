@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @unique @default(cuid())
   email     String    @unique
   username  String    @unique
   posts     Gallery[]
@@ -34,7 +34,7 @@ model Gallery {
   icon      Icon?
   images    Image[]
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int
+  authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
