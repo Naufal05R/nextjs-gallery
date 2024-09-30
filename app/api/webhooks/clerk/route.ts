@@ -1,4 +1,4 @@
-import { createUser, updateUser } from "@/lib/actions/user.actions";
+import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 import { User } from "@/types/user";
 import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
@@ -91,6 +91,10 @@ export async function POST(request: Request) {
   }
 
   if (eventType === "user.deleted") {
-    
+    const { id } = event.data;
+
+    const deletedUser = await deleteUser(id!);
+
+    return NextResponse.json({ message: "OK", user: deletedUser });
   }
 }
