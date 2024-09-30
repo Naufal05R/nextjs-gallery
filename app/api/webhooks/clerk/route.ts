@@ -1,15 +1,15 @@
-// import { createUser } from "@/lib/actions/user.actions";
+import { createUser } from "@/lib/actions/user.actions";
 import { User } from "@/types/user";
-import { /* createClerkClient, */ WebhookEvent } from "@clerk/nextjs/server";
+import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
-// const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
+const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
 
-// const clerkClient = createClerkClient({
-//   secretKey: CLERK_SECRET_KEY,
-// });
+const clerkClient = createClerkClient({
+  secretKey: CLERK_SECRET_KEY,
+});
 
 export async function POST(request: Request) {
   console.log("executed");
@@ -60,20 +60,16 @@ export async function POST(request: Request) {
       lastName: last_name,
     };
 
-    return NextResponse.json({ message: "ok", user: user });
+    const newUser = await createUser(user);
 
-    // console.log(user);
+    if (newUser) {
+      await clerkClient.users.updateUserMetadata(id, {
+        publicMetadata: {
+          userId: newUser.id,
+        },
+      });
+    }
 
-    // const newUser = await createUser(user);
-
-    // if (newUser) {
-    //   await clerkClient.users.updateUserMetadata(id, {
-    //     publicMetadata: {
-    //       userId: newUser.id,
-    //     },
-    //   });
-    // }
-
-    // return NextResponse.json({ message: "ok", user: newUser });
+    return NextResponse.json({ message: "ok", user: newUser });
   }
 }
