@@ -13,3 +13,5 @@ export const createUser = async (user: User) => {
     handlingError(error);
   }
 };
+
+export const getUserById = async () => {};
