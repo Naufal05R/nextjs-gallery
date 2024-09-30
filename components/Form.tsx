@@ -26,10 +26,7 @@ const SignInVariant = forwardRef(() => {
       {signInFormFields.map(({ ...props }, i) => (
         <Input key={i} {...props} />
       ))}
-      <div className="mt-8 flex items-center gap-x-4">
-        <Button variant="outline">Cancel</Button>
-        <Button>Create</Button>
-      </div>
+      <Button className="w-full mt-20">Sign In</Button>
     </form>
   );
 });
