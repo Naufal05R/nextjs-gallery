@@ -66,10 +66,7 @@ export async function POST(request: Request) {
       });
 
       if (existUser) {
-        return NextResponse.json(
-          { message: `Can't create user with email ${user.email} because it already exists` },
-          { status: 406 },
-        );
+        return NextResponse.json({ message: `Email or Username has been used!` }, { status: 403 });
       }
 
       const newUser = await prisma.user.create({ data: user });
@@ -80,7 +77,7 @@ export async function POST(request: Request) {
         },
       });
 
-      return NextResponse.json({ message: "OK", user: updatedUser });
+      return NextResponse.json({ message: "OK", user: updatedUser }, { status: 201 });
     } catch (error) {
       handlingError(error);
     }
@@ -105,7 +102,7 @@ export async function POST(request: Request) {
 
       const updatedUser = await prisma.user.update({ where: { id: selectedUser.id }, data: user });
 
-      return NextResponse.json({ message: "OK", user: updatedUser });
+      return NextResponse.json({ message: "OK", user: updatedUser }, { status: 201 });
     } catch (error) {
       handlingError(error);
     }
