@@ -20,7 +20,7 @@ export const getUserById = async (userId: UserId) => {
   try {
     const selectedUser = await prisma.user.findUnique({ where: { id: userId } });
 
-    if (!selectedUser) throw new Error("User not found");
+    if (!selectedUser) throw new Error("User doesn't exist");
 
     return selectedUser;
   } catch (error) {
@@ -30,7 +30,7 @@ export const getUserById = async (userId: UserId) => {
 
 export const updateUser = async (userId: UserId, user: User) => {
   try {
-    if (userId !== auth().userId) throw new Error("User update failed. Unauthorized!");
+    if (!userId || userId !== auth().userId) throw new Error("User update failed. Unauthorized or User doesn't exist!");
 
     const updatedUser = await prisma.user.update({ where: { id: userId }, data: user });
 
@@ -44,10 +44,10 @@ export const deleteUser = async (userId: UserId) => {
   try {
     const userToDelete = await prisma.user.findUnique({ where: { id: userId } });
 
-    if (!userToDelete) throw new Error("User not found");
-    if (!auth().userId || userToDelete?.id !== auth().userId) throw new Error("User update failed. Unauthorized!");
+    if (!auth().userId || !userToDelete || userToDelete.id !== auth().userId)
+      throw new Error("User update failed. Unauthorized or User doesn't exist!");
 
-    const deletedUser = await prisma.user.delete({ where: { id: userId } });
+    const deletedUser = await prisma.user.delete({ where: { id: userToDelete.id } });
     revalidatePath("/");
 
     return deletedUser ? deletedUser : null;
