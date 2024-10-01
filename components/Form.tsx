@@ -8,6 +8,7 @@ import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 // import { ClerkAPIError } from "@clerk/types";
 import { getInitialFormFields, handlingError, replaceToCamelCase } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 // import { createImage } from "@/lib/actions/image.actions";
 
 export const FormImageVariant = forwardRef(() => {
@@ -52,9 +53,11 @@ FormSignInVariant.displayName = "SignInVariant";
 export const FormSignUpVariant = forwardRef(() => {
   const initialFormFields = getInitialFormFields(signUpFormFields);
 
-  const { signUp } = useSignUp();
+  const { isLoaded, signUp, setActive } = useSignUp();
   const [values, setValues] = useState(initialFormFields);
   const [verifying, setVerifying] = useState(false);
+  const [code, setCode] = useState("");
+  const router = useRouter();
   // const [errors, setErrors] = useState<ClerkAPIError[]>();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,6 +81,23 @@ export const FormSignUpVariant = forwardRef(() => {
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isLoaded) return;
+
+    try {
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code,
+      });
+
+      if (signUpAttempt.status === "complete") {
+        await setActive({ session: signUpAttempt.createdSessionId });
+        router.push("/");
+      } else {
+        console.error(JSON.stringify(signUpAttempt, null, 2));
+      }
+    } catch (error) {
+      handlingError(error);
+    }
   };
 
   return (
