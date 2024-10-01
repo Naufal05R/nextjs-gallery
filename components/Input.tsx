@@ -149,25 +149,19 @@ const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, ..
 
 ImageVariant.displayName = "ImageVariant";
 
-// interface SelectVariantProps extends CustomInputProps {}
+interface SelectVariantProps extends CustomInputProps {
+  handleValueChange: (value: string) => void;
+}
 
-const SelectFieldDropdown = ({
-  id,
-  title,
-  type,
-  entries,
-}: {
-  id: string;
-  title: string;
-  type: ModelSelectFieldType;
-  entries?: Array<string>;
-}) => {
+const SelectFieldDropdown = ({ id, title, type, entries, handleValueChange, ...props }: SelectVariantProps) => {
   switch (type) {
     case "void":
-      return <Input id={id} name={title} type="text" placeholder={`My New ${title}`} />;
+      return (
+        <Input {...props} id={id} name={title} placeholder={`My New ${title}`} className={cn("", props.className)} />
+      );
     default:
       return (
-        <Select name={title} disabled={!type}>
+        <Select required={props.required} onValueChange={handleValueChange} name={title} disabled={!type}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder={`Select ${title}`} />
           </SelectTrigger>
@@ -194,14 +188,15 @@ const SelectFieldDropdown = ({
   }
 };
 
-const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, required, fields, entries }, ref) => {
+const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, fields, entries, ...props }, ref) => {
   const [type, setType] = useState<ModelSelectFieldType>("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const uniqueId = useId();
 
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required={required} className="capitalize">
+      <Label htmlFor={uniqueId} required={props.required} className="capitalize">
         {title}
       </Label>
       <RadioGroup
@@ -224,7 +219,22 @@ const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, r
         })}
       </RadioGroup>
 
-      <SelectFieldDropdown id={title.toLowerCase()} title={title} type={type} entries={entries} />
+      <SelectFieldDropdown
+        {...props}
+        id={title.toLowerCase()}
+        title={title}
+        type={type}
+        entries={entries}
+        handleValueChange={(value) => {
+          if (inputRef.current) {
+            inputRef.current.value = value;
+          }
+        }}
+      />
+
+      {type !== "void" && (
+        <Input {...props} id={title.toLowerCase()} type="hidden" hidden name={title} ref={inputRef} />
+      )}
     </div>
   );
 });
