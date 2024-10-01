@@ -99,7 +99,11 @@ export async function POST(request: Request) {
     };
 
     try {
-      const updatedUser = await prisma.user.update({ where: { id }, data: user });
+      const selectedUser = await prisma.user.findUnique({ where: { id, username: user.username, email: user.email } });
+
+      if (!selectedUser) return NextResponse.json({ message: "User not found!", user: null }, { status: 404 });
+
+      const updatedUser = await prisma.user.update({ where: { id: selectedUser.id }, data: user });
 
       return NextResponse.json({ message: "OK", user: updatedUser });
     } catch (error) {
