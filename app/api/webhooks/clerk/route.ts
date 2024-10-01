@@ -114,8 +114,9 @@ export async function POST(request: Request) {
     try {
       const userToDelete = await prisma.user.findUnique({ where: { id } });
 
-      let deletedUser: User | undefined;
-      if (userToDelete) deletedUser = await prisma.user.delete({ where: { id } });
+      if (userToDelete) return NextResponse.json({ message: "User not found!", user: null }, { status: 404 });
+
+      const deletedUser = await prisma.user.delete({ where: { id } });
 
       return NextResponse.json({ message: "OK", user: deletedUser });
     } catch (error) {
