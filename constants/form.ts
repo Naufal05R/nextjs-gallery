@@ -8,7 +8,7 @@ const defineFormFields = <T extends Array<InputComponentProps>>(fields: T): T =>
   return fields;
 };
 
-export const imageFormFields: Array<InputComponentProps> = [
+export const imageFormFields = defineFormFields([
   {
     model: "Base",
     title: "name",
@@ -37,9 +37,9 @@ export const imageFormFields: Array<InputComponentProps> = [
     title: "tags",
     placeholder: "Add tags to image (separate it with comma)",
   },
-];
+] as const);
 
-export const signInFormFields: Array<InputComponentProps> = [
+export const signInFormFields = defineFormFields([
   {
     model: "Base",
     title: "email/username",
@@ -53,7 +53,7 @@ export const signInFormFields: Array<InputComponentProps> = [
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
     required: true,
   },
-];
+] as const);
 
 export const signUpFormFields = defineFormFields([
   {
