@@ -30,7 +30,7 @@ const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, cla
       <Label htmlFor={uniqueId} className="capitalize" required={props.required}>
         {title}
       </Label>
-      <Input id={uniqueId} name={title} type="text" {...props} />
+      <Input id={uniqueId} name={title} {...props} />
     </div>
   );
 });
@@ -39,7 +39,7 @@ BaseVariant.displayName = "BaseVariant";
 
 // interface SeveralVariantProps extends CustomInputProps {}
 
-const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, placeholder, required }, ref) => {
+const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, onChange, ...props }, ref) => {
   const [several, setSeveral] = useState<Array<string>>([]);
   const [value, setValue] = useState("");
 
@@ -47,10 +47,10 @@ const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, 
 
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required={required} className="capitalize">
+      <Label htmlFor={uniqueId} required={props.required} className="capitalize">
         {title}
       </Label>
-      <Input name={title} type="hidden" value={several} />
+      <Input name={title} type="hidden" value={several} onChange={onChange} />
       <Input
         id={uniqueId}
         value={value}
@@ -63,8 +63,7 @@ const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, 
             setValue("");
           }
         }}
-        type="text"
-        placeholder={placeholder}
+        {...props}
       />
 
       <ul className={cn("flex flex-wrap items-center gap-1.5 rounded-md border p-1.5", { hidden: !several?.length })}>
