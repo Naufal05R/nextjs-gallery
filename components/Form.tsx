@@ -67,6 +67,7 @@ export const FormSignUpVariant = forwardRef(() => {
       await signUp?.create({
         emailAddress: values.email,
         password: values.password,
+        username: values.username,
       });
 
       await signUp?.prepareEmailAddressVerification({
@@ -99,6 +100,19 @@ export const FormSignUpVariant = forwardRef(() => {
       handlingError(error);
     }
   };
+
+  if (verifying) {
+    return (
+      <>
+        <h1>Verify your email</h1>
+        <form onSubmit={handleVerify}>
+          <label id="code">Enter your verification code</label>
+          <input value={code} id="code" name="code" onChange={(e) => setCode(e.target.value)} />
+          <button type="submit">Verify</button>
+        </form>
+      </>
+    );
+  }
 
   return (
     <form className="flex flex-wrap justify-between">
