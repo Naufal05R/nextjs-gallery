@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Form from "@/components/Form";
+import { FormImageVariant } from "@/components/Form";
 
 export default function DashboardAddPage() {
   return (
@@ -12,7 +12,7 @@ export default function DashboardAddPage() {
           <CardDescription>Create your new Image.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form.Image />
+          <FormImageVariant />
         </CardContent>
       </Card>
     </main>
