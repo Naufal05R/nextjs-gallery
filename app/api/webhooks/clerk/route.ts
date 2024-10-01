@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     try {
       const selectedUser = await prisma.user.findUnique({ where: { id, username: user.username, email: user.email } });
 
-      if (!selectedUser) return NextResponse.json({ message: "User not found!", user: null }, { status: 404 });
+      if (!selectedUser) return NextResponse.json({ message: "User doesn't exist!", user: null }, { status: 404 });
 
       const updatedUser = await prisma.user.update({ where: { id: selectedUser.id }, data: user });
 
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
     try {
       const userToDelete = await prisma.user.findUnique({ where: { id } });
 
-      if (userToDelete) return NextResponse.json({ message: "User not found!", user: null }, { status: 404 });
+      if (userToDelete) return NextResponse.json({ message: "User doesn't exist!", user: null }, { status: 404 });
 
       const deletedUser = await prisma.user.delete({ where: { id } });
 
