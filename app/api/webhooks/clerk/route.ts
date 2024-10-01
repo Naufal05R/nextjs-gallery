@@ -61,6 +61,15 @@ export async function POST(request: Request) {
     };
 
     try {
+      const existUser = await prisma.user.findUnique({ where: { email: user.email } });
+
+      if (existUser) {
+        return NextResponse.json(
+          { message: `Can't create user with email ${user.email} because it already exists` },
+          { status: 406 },
+        );
+      }
+
       const newUser = await prisma.user.create({ data: user });
 
       const updatedUser = await clerkClient.users.updateUserMetadata(id, {
