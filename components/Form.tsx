@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 // import { ClerkAPIError } from "@clerk/types";
-import { getInitialFormFields, replaceToCamelCase } from "@/lib/utils";
+import { getInitialFormFields, handlingError, replaceToCamelCase } from "@/lib/utils";
 // import { createImage } from "@/lib/actions/image.actions";
 
 export const FormImageVariant = forwardRef(() => {
@@ -54,6 +54,7 @@ export const FormSignUpVariant = forwardRef(() => {
 
   const { signUp } = useSignUp();
   const [values, setValues] = useState(initialFormFields);
+  const [verifying, setVerifying] = useState(false);
   // const [errors, setErrors] = useState<ClerkAPIError[]>();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,8 +65,14 @@ export const FormSignUpVariant = forwardRef(() => {
         emailAddress: values.email,
         password: values.password,
       });
+
+      await signUp?.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+
+      setVerifying(true);
     } catch (error) {
-      console.log(error);
+      handlingError(error);
     }
   };
 
