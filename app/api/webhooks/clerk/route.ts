@@ -1,8 +1,8 @@
-import { deleteUser, updateUser } from "@/lib/actions/user.actions";
+import { deleteUser } from "@/lib/actions/user.actions";
 import { prisma } from "@/lib/prisma";
 import { handlingError } from "@/lib/utils";
 import { User } from "@/types/user";
-import { auth, createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
+import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
@@ -88,13 +88,13 @@ export async function POST(request: Request) {
       lastName: last_name,
     };
 
-    let updatedUser: User | undefined = user;
+    try {
+      const updatedUser = await prisma.user.update({ where: { id }, data: user });
 
-    if (auth().userId) {
-      updatedUser = await updateUser(id, user);
+      return NextResponse.json({ message: "OK", user: updatedUser });
+    } catch (error) {
+      handlingError(error);
     }
-
-    return NextResponse.json({ message: "OK", user: updatedUser });
   }
 
   if (eventType === "user.deleted") {
