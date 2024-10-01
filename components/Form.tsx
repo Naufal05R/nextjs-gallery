@@ -76,6 +76,10 @@ export const FormSignUpVariant = forwardRef(() => {
     }
   };
 
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <form className="flex flex-wrap justify-between">
       {signUpFormFields.map(({ ...props }, i) => (
