@@ -4,6 +4,10 @@ import { ModelSelectFieldEnum } from "./enum";
 
 const modelEnumObject = getEnumObject(ModelSelectFieldEnum);
 
+const defineFormFields = <T extends Array<InputComponentProps>>(fields: T): T => {
+  return fields;
+};
+
 export const imageFormFields: Array<InputComponentProps> = [
   {
     model: "Base",
@@ -51,7 +55,7 @@ export const signInFormFields: Array<InputComponentProps> = [
   },
 ];
 
-export const signUpFormFields: Array<InputComponentProps> = [
+export const signUpFormFields = defineFormFields([
   {
     model: "Base",
     title: "first name",
@@ -90,4 +94,6 @@ export const signUpFormFields: Array<InputComponentProps> = [
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
     required: true,
   },
-];
+] as const);
+
+type FieldType = (typeof signUpFormFields)[number]["title"];
