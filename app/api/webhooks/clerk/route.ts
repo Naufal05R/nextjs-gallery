@@ -61,7 +61,9 @@ export async function POST(request: Request) {
     };
 
     try {
-      const existUser = await prisma.user.findUnique({ where: { email: user.email } });
+      const existUser = await prisma.user.findFirst({
+        where: { OR: [{ email: user.email }, { username: user.username }] },
+      });
 
       if (existUser) {
         return NextResponse.json(
