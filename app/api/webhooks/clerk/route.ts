@@ -1,6 +1,6 @@
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 import { User } from "@/types/user";
-import { createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
+import { auth, createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
@@ -84,7 +84,11 @@ export async function POST(request: Request) {
       lastName: last_name,
     };
 
-    const updatedUser = await updateUser(id, user);
+    let updatedUser: User | undefined = user;
+
+    if (auth().userId) {
+      updatedUser = await updateUser(id, user);
+    }
 
     return NextResponse.json({ message: "OK", user: updatedUser });
   }
