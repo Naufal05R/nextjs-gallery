@@ -78,9 +78,9 @@ export const FormSignUpVariant = forwardRef(() => {
           value={values[replaceToCamelCase(props.title)]}
           onChange={(ref) => {
             if (typeof ref === "string") {
-              setValues({ ...values, [props.title.replace(/\s+/g, "_").toLowerCase()]: ref });
+              setValues({ ...values, [replaceToCamelCase(props.title)]: ref });
             } else {
-              setValues({ ...values, [props.title.replace(/\s+/g, "_").toLowerCase()]: ref.target.value });
+              setValues({ ...values, [replaceToCamelCase(props.title)]: ref.target.value });
             }
           }}
         />
