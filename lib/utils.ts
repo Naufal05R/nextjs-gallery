@@ -21,20 +21,20 @@ export function getExtension(filename: string) {
   return filename.split(".").pop();
 }
 
-export function getInitialValues<
+export function getInitialFormFields<
   T extends InputComponentProps,
   AT extends Array<T>,
   FT extends CamelCase<ExtractFieldType<AT>>,
 >(formFields: AT): Record<FT, string> {
-  const initialValues: Record<FT, string> | Record<string, string> = {};
+  const initialFields: Record<FT, string> | Record<string, string> = {};
 
   formFields.forEach((item) => {
     const key = replaceToCamelCase(item.title);
 
-    initialValues[key] = "";
+    initialFields[key] = "";
   });
 
-  return initialValues;
+  return initialFields;
 }
 
 export function handlingError(error: unknown) {
