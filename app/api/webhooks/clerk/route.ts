@@ -1,4 +1,3 @@
-import { deleteUser } from "@/lib/actions/user.actions";
 import { prisma } from "@/lib/prisma";
 import { handlingError } from "@/lib/utils";
 import { User } from "@/types/user";
@@ -100,9 +99,16 @@ export async function POST(request: Request) {
   if (eventType === "user.deleted") {
     const { id } = event.data;
 
-    const deletedUser = await deleteUser(id!);
+    try {
+      const userToDelete = await prisma.user.findUnique({ where: { id } });
 
-    return NextResponse.json({ message: "OK", user: deletedUser });
+      let deletedUser: User | undefined;
+      if (userToDelete) deletedUser = await prisma.user.delete({ where: { id } });
+
+      return NextResponse.json({ message: "OK", user: deletedUser });
+    } catch (error) {
+      handlingError(error);
+    }
   }
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
