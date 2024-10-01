@@ -1,4 +1,6 @@
-import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
+import { deleteUser, updateUser } from "@/lib/actions/user.actions";
+import { prisma } from "@/lib/prisma";
+import { handlingError } from "@/lib/utils";
 import { User } from "@/types/user";
 import { auth, createClerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
@@ -59,17 +61,19 @@ export async function POST(request: Request) {
       lastName: last_name,
     };
 
-    const newUser = await createUser(user);
+    try {
+      const newUser = await prisma.user.create({ data: user });
 
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
+      const updatedUser = await clerkClient.users.updateUserMetadata(id, {
         publicMetadata: {
           userId: newUser.id,
         },
       });
-    }
 
-    return NextResponse.json({ message: "OK", user: newUser });
+      return NextResponse.json({ message: "OK", user: updatedUser });
+    } catch (error) {
+      handlingError(error);
+    }
   }
 
   if (eventType === "user.updated") {
