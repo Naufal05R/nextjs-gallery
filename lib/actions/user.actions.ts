@@ -30,7 +30,10 @@ export const getUserById = async (userId: UserId) => {
 
 export const updateUser = async (userId: UserId, user: User) => {
   try {
-    if (!userId || userId !== auth().userId) throw new Error("User update failed. Unauthorized or User doesn't exist!");
+    const userToDelete = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!auth().userId || !userToDelete || userToDelete.id !== auth().userId)
+      throw new Error("User update failed. Unauthorized or User doesn't exist!");
 
     const updatedUser = await prisma.user.update({ where: { id: userId }, data: user });
 
