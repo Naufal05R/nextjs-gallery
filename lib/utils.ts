@@ -31,3 +31,10 @@ export function handlingError(error: unknown) {
     throw new Error(`Unknown error: ${JSON.stringify(error)}`);
   }
 }
+
+export function replaceToCamelCase<T extends string>(str: T): CamelCase<T> {
+  return str
+    .split(" ")
+    .map((word, index) => (index ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : word.toLowerCase()))
+    .join("") as CamelCase<T>;
+}
