@@ -6,7 +6,7 @@ import { forwardRef, useState } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
-import { ClerkAPIError } from "@clerk/types";
+// import { ClerkAPIError } from "@clerk/types";
 import { getInitialFormFields, replaceToCamelCase } from "@/lib/utils";
 // import { createImage } from "@/lib/actions/image.actions";
 
@@ -52,9 +52,9 @@ FormSignInVariant.displayName = "SignInVariant";
 export const FormSignUpVariant = forwardRef(() => {
   const initialFormFields = getInitialFormFields(signUpFormFields);
 
-  const { isLoaded, signUp, setActive } = useSignUp();
+  const { signUp } = useSignUp();
   const [values, setValues] = useState(initialFormFields);
-  const [errors, setErrors] = useState<ClerkAPIError[]>();
+  // const [errors, setErrors] = useState<ClerkAPIError[]>();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
