@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
 import Input from "@/components/Input";
 import Link from "next/link";
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn, useSignUp } from "@clerk/nextjs";
 // import { createImage } from "@/lib/actions/image.actions";
 
 export const FormImageVariant = forwardRef(() => {
@@ -48,8 +48,12 @@ export const FormSignInVariant = forwardRef(() => {
 FormSignInVariant.displayName = "SignInVariant";
 
 export const FormSignUpVariant = forwardRef(() => {
+  const {} = useSignUp();
+
+  const handleSubmit = async () => {};
+
   return (
-    <form /* action={createImage} */ className="flex flex-wrap justify-between">
+    <form onSubmit={handleSubmit} className="flex flex-wrap justify-between">
       {signUpFormFields.map(({ ...props }, i) => (
         <Input key={i} {...props} />
       ))}
