@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useId, useState } from "react";
+import React, { forwardRef, useId, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
@@ -90,13 +90,14 @@ SeveralVariant.displayName = "SeveralVariant";
 
 // interface ImageVariantProps extends CustomInputProps {}
 
-const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, required }, ref) => {
+const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, ...props }, ref) => {
   const [image, setImage] = useState<File>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const uniqueId = useId();
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label required={required} className="capitalize">
+      <Label required={props.required} className="capitalize">
         {title}
       </Label>
       <Label
@@ -105,14 +106,34 @@ const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, re
       >
         <Input
           id={uniqueId}
-          name={title}
           type="file"
           hidden
-          accept="image/jpg, image/jpeg, image/png"
           className="hidden"
+          required={props.required}
           onChange={(e) => {
-            setImage(e.target.files?.[0]);
+            const image = e.target.files?.[0];
+
+            if (!image) return;
+
+            if (inputRef.current) {
+              if (inputRef.current.files) {
+                inputRef.current.files[0] = image;
+              }
+            }
+
+            console.log(inputRef.current?.files?.[0]);
+            setImage(image);
           }}
+        />
+        <Input
+          type="file"
+          name={title}
+          hidden
+          className="hidden"
+          ref={inputRef}
+          accept="image/jpg, image/jpeg, image/png"
+          disabled
+          {...props}
         />
         {image ? (
           <figure className="relative h-full w-full overflow-hidden rounded">
