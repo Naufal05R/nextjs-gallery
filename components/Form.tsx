@@ -27,8 +27,10 @@ FormImageVariant.displayName = "ImageVariant";
 export const FormSignInVariant = forwardRef(() => {
   const {} = useSignIn();
 
+  const handleSubmit = async () => {};
+
   return (
-    <form /* action={createImage} */>
+    <form onSubmit={handleSubmit}>
       {signInFormFields.map(({ ...props }, i) => (
         <Input key={i} {...props} />
       ))}
