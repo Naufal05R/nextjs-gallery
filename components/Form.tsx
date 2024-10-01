@@ -1,11 +1,13 @@
 "use client";
 
-import { forwardRef } from "react";
+import Link from "next/link";
+import Input from "@/components/Input";
+import { forwardRef, useState } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
-import Input from "@/components/Input";
-import Link from "next/link";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
+import { ClerkAPIError } from "@clerk/types";
+import { getInitialFormFields, replaceToCamelCase } from "@/lib/utils";
 // import { createImage } from "@/lib/actions/image.actions";
 
 export const FormImageVariant = forwardRef(() => {
@@ -48,16 +50,44 @@ export const FormSignInVariant = forwardRef(() => {
 FormSignInVariant.displayName = "SignInVariant";
 
 export const FormSignUpVariant = forwardRef(() => {
-  const {} = useSignUp();
+  const initialFormFields = getInitialFormFields(signUpFormFields);
 
-  const handleSubmit = async () => {};
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const [values, setValues] = useState(initialFormFields);
+  const [errors, setErrors] = useState<ClerkAPIError[]>();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await signUp?.create({
+        emailAddress: values.email,
+        password: values.password,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-wrap justify-between">
+    <form className="flex flex-wrap justify-between">
       {signUpFormFields.map(({ ...props }, i) => (
-        <Input key={i} {...props} />
+        <Input
+          key={i}
+          {...props}
+          value={values[replaceToCamelCase(props.title)]}
+          onChange={(ref) => {
+            if (typeof ref === "string") {
+              setValues({ ...values, [props.title.replace(/\s+/g, "_").toLowerCase()]: ref });
+            } else {
+              setValues({ ...values, [props.title.replace(/\s+/g, "_").toLowerCase()]: ref.target.value });
+            }
+          }}
+        />
       ))}
-      <Button className="mt-8 w-full">Sign Up</Button>
+      <Button type="button" onClick={handleSubmit} className="mt-8 w-full">
+        Sign Up
+      </Button>
       <p className="mt-4 text-sm">
         Already have an account?{" "}
         <Link href="/sign-in" className="text-blue-500 underline-offset-2 hover:underline">
