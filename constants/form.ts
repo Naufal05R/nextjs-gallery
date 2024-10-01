@@ -2,6 +2,8 @@ import { InputComponentProps } from "@/components/Input";
 import { getEnumObject } from "@/lib/utils";
 import { ModelSelectFieldEnum } from "./enum";
 
+export type ExtractFieldType<T extends Array<{ title: string }>> = T[number]["title"];
+
 const modelEnumObject = getEnumObject(ModelSelectFieldEnum);
 
 const defineFormFields = <T extends Array<InputComponentProps>>(fields: T): T => {
@@ -95,5 +97,3 @@ export const signUpFormFields = defineFormFields([
     required: true,
   },
 ] as const);
-
-type FieldType = (typeof signUpFormFields)[number]["title"];
