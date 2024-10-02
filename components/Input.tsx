@@ -11,8 +11,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 import { wrapper } from "@/lib/styles";
+import { InputComponentProps, Variants } from "@/types/input";
 
 export interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {
+  model: Variants;
   className?: string;
   fields?: Array<string>;
   entries?: Array<string>;
@@ -20,77 +22,87 @@ export interface CustomInputProps extends WithRequired<VariantProps<typeof Input
 
 type ModelSelectFieldType = Lowercase<keyof typeof ModelSelectFieldEnum> | "";
 
-// interface BaseVariantProps extends CustomInputProps {}
+export interface BaseVariantProps extends CustomInputProps {
+  model: "Base";
+}
 
-const BaseVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, className, ...props }, ref) => {
-  const uniqueId = useId();
+export const InputBaseVariant = forwardRef<HTMLInputElement, BaseVariantProps>(
+  ({ title, className, ...props }, ref) => {
+    const uniqueId = useId();
 
-  return (
-    <div className={cn(wrapper.input, className)} ref={ref}>
-      <Label htmlFor={uniqueId} className="capitalize" required={props.required}>
-        {title}
-      </Label>
-      <Input id={uniqueId} name={title} {...props} />
-    </div>
-  );
-});
+    return (
+      <div className={cn(wrapper.input, className)} ref={ref}>
+        <Label htmlFor={uniqueId} className="capitalize" required={props.required}>
+          {title}
+        </Label>
+        <Input id={uniqueId} name={title} {...props} />
+      </div>
+    );
+  },
+);
 
-BaseVariant.displayName = "BaseVariant";
+InputBaseVariant.displayName = "BaseVariant";
 
-// interface SeveralVariantProps extends CustomInputProps {}
+export interface SeveralVariantProps extends CustomInputProps {
+  model: "Several";
+}
 
-const SeveralVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, onChange, ...props }, ref) => {
-  const [several, setSeveral] = useState<Array<string>>([]);
-  const [value, setValue] = useState("");
+export const InputSeveralVariant = forwardRef<HTMLInputElement, SeveralVariantProps>(
+  ({ title, onChange, ...props }, ref) => {
+    const [several, setSeveral] = useState<Array<string>>([]);
+    const [value, setValue] = useState("");
 
-  const uniqueId = useId();
+    const uniqueId = useId();
 
-  return (
-    <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required={props.required} className="capitalize">
-        {title}
-      </Label>
-      <Input name={title} type="hidden" value={several} onChange={onChange} />
-      <Input
-        id={uniqueId}
-        value={value}
-        onChange={(e) => {
-          const { value } = e.target;
-          setValue(value);
+    return (
+      <div className={cn(wrapper.input)} ref={ref}>
+        <Label htmlFor={uniqueId} required={props.required} className="capitalize">
+          {title}
+        </Label>
+        <Input name={title} type="hidden" value={several} onChange={onChange} />
+        <Input
+          id={uniqueId}
+          value={value}
+          onChange={(e) => {
+            const { value } = e.target;
+            setValue(value);
 
-          if (value.endsWith(",")) {
-            setSeveral([...several, value.slice(0, -1)]);
-            setValue("");
-          }
-        }}
-        {...props}
-      />
+            if (value.endsWith(",")) {
+              setSeveral([...several, value.slice(0, -1)]);
+              setValue("");
+            }
+          }}
+          {...props}
+        />
 
-      <ul className={cn("flex flex-wrap items-center gap-1.5 rounded-md border p-1.5", { hidden: !several?.length })}>
-        {several?.map((inputted) => (
-          <li
-            key={inputted}
-            className="relative -ml-px w-fit select-none rounded bg-slate-800 py-1 pl-2.5 pr-7 text-sm text-slate-100"
-          >
-            {inputted}
+        <ul className={cn("flex flex-wrap items-center gap-1.5 rounded-md border p-1.5", { hidden: !several?.length })}>
+          {several?.map((inputted) => (
+            <li
+              key={inputted}
+              className="relative -ml-px w-fit select-none rounded bg-slate-800 py-1 pl-2.5 pr-7 text-sm text-slate-100"
+            >
+              {inputted}
 
-            <X
-              onClick={() => setSeveral(several.filter((i) => i !== inputted))}
-              size={16}
-              className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-});
+              <X
+                onClick={() => setSeveral(several.filter((i) => i !== inputted))}
+                size={16}
+                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  },
+);
 
-SeveralVariant.displayName = "SeveralVariant";
+InputSeveralVariant.displayName = "SeveralVariant";
 
-// interface ImageVariantProps extends CustomInputProps {}
+export interface ImageVariantProps extends CustomInputProps {
+  model: "Image";
+}
 
-const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, ...props }, ref) => {
+export const InputImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title, ...props }, ref) => {
   const [image, setImage] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -147,10 +159,11 @@ const ImageVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, ..
   );
 });
 
-ImageVariant.displayName = "ImageVariant";
+InputImageVariant.displayName = "ImageVariant";
 
-interface SelectVariantProps extends CustomInputProps {
-  handleValueChange: (value: string) => void;
+export interface SelectVariantProps extends CustomInputProps {
+  model: "Select";
+  handleValueChange?: (value: string) => void;
 }
 
 const SelectFieldDropdown = ({ id, title, type, entries, handleValueChange, ...props }: SelectVariantProps) => {
@@ -188,77 +201,96 @@ const SelectFieldDropdown = ({ id, title, type, entries, handleValueChange, ...p
   }
 };
 
-const SelectVariant = forwardRef<HTMLInputElement, CustomInputProps>(({ title, fields, entries, ...props }, ref) => {
-  const [type, setType] = useState<ModelSelectFieldType>("");
-  const inputRef = useRef<HTMLInputElement>(null);
+export const InputSelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(
+  ({ title, fields, entries, ...props }, ref) => {
+    const [type, setType] = useState<ModelSelectFieldType>("");
+    const inputRef = useRef<HTMLInputElement>(null);
 
-  const uniqueId = useId();
+    const uniqueId = useId();
 
-  return (
-    <div className={cn(wrapper.input)} ref={ref}>
-      <Label htmlFor={uniqueId} required={props.required} className="capitalize">
-        {title}
-      </Label>
-      <RadioGroup
-        defaultValue=""
-        className="flex items-center gap-x-4"
-        onValueChange={(value: ModelSelectFieldType) => setType(value)}
-      >
-        {fields?.map((field) => {
-          return (
-            <Label
-              key={title + field}
-              htmlFor={title + field}
-              className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
-            >
-              <RadioGroupItem value={field.toLowerCase()} id={title + field} hidden />
-              <span className="capitalize">Select {field}</span>
-              <Check size={16} className="invisible ml-auto group-has-[:checked]:visible" />
-            </Label>
-          );
-        })}
-      </RadioGroup>
+    return (
+      <div className={cn(wrapper.input)} ref={ref}>
+        <Label htmlFor={uniqueId} required={props.required} className="capitalize">
+          {title}
+        </Label>
+        <RadioGroup
+          defaultValue=""
+          className="flex items-center gap-x-4"
+          onValueChange={(value: ModelSelectFieldType) => setType(value)}
+        >
+          {fields?.map((field) => {
+            return (
+              <Label
+                key={title + field}
+                htmlFor={title + field}
+                className="group flex h-10 flex-1 cursor-pointer items-center rounded-md border bg-transparent px-3 py-2.5 has-[:checked]:border-slate-400 has-[:checked]:text-slate-800"
+              >
+                <RadioGroupItem value={field.toLowerCase()} id={title + field} hidden />
+                <span className="capitalize">Select {field}</span>
+                <Check size={16} className="invisible ml-auto group-has-[:checked]:visible" />
+              </Label>
+            );
+          })}
+        </RadioGroup>
 
-      <SelectFieldDropdown
-        {...props}
-        id={title.toLowerCase()}
-        title={title}
-        type={type}
-        entries={entries}
-        handleValueChange={(value) => {
-          if (inputRef.current) {
-            inputRef.current.value = value;
-          }
-        }}
-      />
+        <SelectFieldDropdown
+          {...props}
+          id={title.toLowerCase()}
+          title={title}
+          type={type}
+          entries={entries}
+          handleValueChange={(value) => {
+            if (inputRef.current) {
+              inputRef.current.value = value;
+            }
+          }}
+        />
 
-      {type !== "void" && (
-        <Input {...props} id={title.toLowerCase()} type="hidden" hidden name={title} ref={inputRef} />
-      )}
-    </div>
-  );
-});
+        {type !== "void" && (
+          <Input {...props} id={title.toLowerCase()} type="hidden" hidden name={title} ref={inputRef} />
+        )}
+      </div>
+    );
+  },
+);
 
-SelectVariant.displayName = "SelectVariant";
+InputSelectVariant.displayName = "SelectVariant";
 
-const Variant = {
-  Base: BaseVariant,
-  Several: SeveralVariant,
-  Image: ImageVariant,
-  Select: SelectVariant,
-};
-
-export type InputVariantType = keyof typeof Variant;
-
-export interface InputComponentProps extends CustomInputProps {
-  model: InputVariantType;
-  title: string;
+export interface CodeVariantProps extends CustomInputProps {
+  model: "Code";
+  length: number;
 }
 
-const Component = ({ model, ...props }: InputComponentProps) => {
-  const Rendered = Variant[model];
+export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
+  ({ title, className, /* length, */ ...props }, ref) => {
+    const uniqueId = useId();
 
-  return <Rendered {...props} />;
+    return (
+      <div className={cn(wrapper.input, className)} ref={ref}>
+        <Label htmlFor={uniqueId} className="capitalize" required={props.required}>
+          {title}
+        </Label>
+        <Input id={uniqueId} name={title} {...props} />
+      </div>
+    );
+  },
+);
+
+InputCodeVariant.displayName = "CodeVariant";
+
+const RenderedComponent = ({ ...props }: InputComponentProps) => {
+  switch (props.model) {
+    case "Base":
+      return <InputBaseVariant {...props} />;
+    case "Image":
+      return <InputImageVariant {...props} />;
+    case "Select":
+      return <InputSelectVariant {...props} />;
+    case "Several":
+      return <InputSeveralVariant {...props} />;
+    case "Code":
+      return <InputCodeVariant {...props} length={props.length} />;
+  }
 };
 
-export default Component;
+export default RenderedComponent;
