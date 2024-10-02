@@ -1,6 +1,6 @@
 import * as InputVariants from "@/components/Input";
 
-export type InputVariantTypes = keyof typeof InputVariants;
+export type InputVariantTypes = Exclude<keyof typeof InputVariants, "default">;
 
 export type Variants = InputVariantTypes extends `Input${infer V}Variant` ? V : InputVariantTypes;
 
