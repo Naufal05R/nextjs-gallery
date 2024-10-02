@@ -1,4 +1,4 @@
-import { InputComponentProps } from "@/components/Input";
+import { InputComponentProps } from "@/types/input";
 import { ExtractFieldType } from "@/constants/form";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
