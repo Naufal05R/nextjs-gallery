@@ -1,6 +1,6 @@
-import { InputComponentProps } from "@/components/Input";
 import { getEnumObject } from "@/lib/utils";
 import { ModelSelectFieldEnum } from "./enum";
+import { InputComponentProps } from "@/types/input";
 
 export type ExtractFieldType<T extends Array<{ title: string }>> = T[number]["title"];
 
