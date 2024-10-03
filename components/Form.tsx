@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Input from "@/components/Input";
 import { forwardRef, useState } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
@@ -9,6 +8,8 @@ import { useSignIn, useSignUp } from "@clerk/nextjs";
 // import { ClerkAPIError } from "@clerk/types";
 import { getInitialFormFields, handlingError, replaceToCamelCase } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import Input from "./Input";
 // import { createImage } from "@/lib/actions/image.actions";
 
 export const FormImageVariant = forwardRef(() => {
@@ -101,18 +102,34 @@ export const FormSignUpVariant = forwardRef(() => {
     }
   };
 
-  if (verifying) {
-    return (
-      <>
-        <h1>Verify your email</h1>
-        <form onSubmit={handleVerify}>
-          <label id="code">Enter your verification code</label>
-          <input value={code} id="code" name="code" onChange={(e) => setCode(e.target.value)} />
-          <button type="submit">Verify</button>
+  // if (verifying) {
+  return (
+    <>
+      <CardHeader>
+        <CardTitle>Email Verification</CardTitle>
+        <CardDescription>Please check at {values.email || "your@email.com"} mailbox.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleVerify} className="flex flex-col">
+          <Input
+            model="Code"
+            title="Code"
+            value={code}
+            length={6}
+            onValueChange={(value) => setCode(value)}
+            valueType="string"
+          />
+          <Button type="button" variant="link" className="w-full text-blue-500 underline-offset-2">
+            Didn&apos;t receive a code? Resend
+          </Button>
+          <Button type="button" onClick={() => console.log(code)} className="mt-8 w-full">
+            Verify
+          </Button>
         </form>
-      </>
-    );
-  }
+      </CardContent>
+    </>
+  );
+  // }
 
   return (
     <form className="flex flex-wrap justify-between">
