@@ -274,12 +274,7 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
 
     const handleChange = ({ i, v }: { i: number; v: string }) => {
       setValue([...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]);
-      setCode(
-        [
-          ...[...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)],
-          // v.toUpperCase() as Character,
-        ].join(""),
-      );
+      setCode([...[...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]].join(""));
     };
 
     return (
@@ -315,7 +310,6 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                   }
 
                   handleChange({ i, v: "" });
-                  // updateInput();
                   return;
                 }
 
@@ -324,7 +318,6 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
 
                   setCode("");
                   setValue(initialValue);
-                  // updateInput();
                   return;
                 }
 
@@ -370,13 +363,6 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                   for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
                     const exceededInput = characterIndex >= length;
                     if (exceededInput) break;
-
-                    // const currentInputIndex = characterIndex + i;
-
-                    // // const targetInput = inputs[currentInputIndex];
-
-                    // // const character = splittedCharacters[characterIndex];
-                    // // (targetInput as HTMLInputElement).value = character;
                   }
 
                   setValue(
@@ -394,14 +380,10 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                     ]
                       .slice(0, length)
                       .join(""),
-                    // v.toUpperCase() as Character,
                   );
 
                   const focusIndex = Math.min(length - 1, i + splittedCharacters.length);
                   (inputs[focusIndex] as HTMLInputElement).focus();
-
-                  // handleChange({ i, v: splittedCharacters });
-                  // (nextElementSibling as HTMLInputElement).focus();
                 }
               }}
             />
