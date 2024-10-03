@@ -271,7 +271,6 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
     const [code, setCode] = useState("");
 
     const fieldsetRef = useRef<HTMLFieldSetElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
 
     const uniqueId = useId();
 
@@ -404,13 +403,12 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
         </fieldset>
 
         <Input
-          // type="hidden"
-          // className="hidden"
-          // hidden
+          type="hidden"
+          className="hidden"
+          hidden
           name={title}
           value={valueType === "string" ? code : JSON.stringify(value)}
-          onChange={() => console.log("onchange executed")}
-          ref={inputRef}
+          readOnly
         />
       </div>
     );
