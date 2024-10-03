@@ -406,7 +406,14 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
           ))}
         </fieldset>
 
-        <Input name={title} value={valueType === "string" ? value.join("") : JSON.stringify(value)} readOnly />
+        <Input
+          className="hidden"
+          type="hidden"
+          hidden
+          name={title}
+          value={valueType === "string" ? value.join("") : JSON.stringify(value)}
+          readOnly
+        />
       </div>
     );
   },
