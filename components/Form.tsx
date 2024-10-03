@@ -29,14 +29,50 @@ export const FormImageVariant = forwardRef(() => {
 FormImageVariant.displayName = "ImageVariant";
 
 export const FormSignInVariant = forwardRef(() => {
-  const {} = useSignIn();
+  const initialFormFields = getInitialFormFields(signInFormFields);
 
-  const handleSubmit = async () => {};
+  const { isLoaded, signIn, setActive } = useSignIn();
+  const [values, setValues] = useState(initialFormFields);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: values["email/username"],
+        password: values.password,
+      });
+
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        router.push("/");
+      } else {
+        console.error(JSON.stringify(signInAttempt, null, 2));
+      }
+    } catch (error) {
+      console.error(JSON.stringify(error, null, 2));
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       {signInFormFields.map(({ ...props }, i) => (
-        <Input key={i} {...props} />
+        <Input
+          key={i}
+          {...props}
+          onChange={(ref) => {
+            if (typeof ref === "string") {
+              setValues({ ...values, [props.title]: ref });
+            } else {
+              setValues({ ...values, [props.title]: ref.target.value });
+            }
+          }}
+        />
       ))}
       <Button className="mt-8 w-full">Sign In</Button>
       <p className="mt-4 text-sm">
