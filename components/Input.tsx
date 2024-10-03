@@ -358,7 +358,7 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
 
                 if (userPastingAnswerAutomatically && !inputIsEmpty) {
                   console.log("userPastingAnswerAutomatically executed");
-                  const splittedCharacters = v.split("");
+                  const splittedCharacters = v.toUpperCase().split("");
 
                   for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
                     const exceededInput = characterIndex >= length;
