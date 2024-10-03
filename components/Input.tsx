@@ -341,7 +341,12 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                 }
               }}
               onChange={(e) => {
-                const { value: v, nextElementSibling } = e.target as HTMLInputElement;
+                const { value: _v, nextElementSibling } = e.target as HTMLInputElement;
+
+                const v = _v
+                  .trim()
+                  .replace(/[^a-zA-Z0-9]/g, "")
+                  .replace(/\s/g, "");
 
                 const inputs = fieldsetRef.current!.children;
 
@@ -392,11 +397,12 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
         </fieldset>
 
         <Input
-          type="hidden"
-          className="hidden"
+          // type="hidden"
+          // className="hidden"
+          // hidden
           name={title}
           value={valueType === "string" ? code : JSON.stringify(value)}
-          readOnly
+          // onChange={props.onChange}
         />
       </div>
     );
