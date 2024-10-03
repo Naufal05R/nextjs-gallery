@@ -268,35 +268,39 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
     const initialValue = Array.from({ length }).map((): "" => "");
 
     const [value, setValue] = useState<Array<Character | "">>(initialValue);
-    const [code, setCode] = useState("");
 
     const fieldsetRef = useRef<HTMLFieldSetElement>(null);
 
     const uniqueId = useId();
 
-    const handlePaste = ({ i, v }: { i: number; v: string[] }) => {
-      const _value = [...value.slice(0, i), ...(v as Character[]).slice(0, length - i), ...value.slice(i + 1)].slice(
-        0,
-        length,
-      ) as Character[];
-      const _code = [...value.slice(0, i), ...(v as Character[]).slice(0, length - i), ...value.slice(i + 1)]
-        .slice(0, length)
-        .join("");
+    const getPastedValue = ({ i, v }: { i: number; v: Character[] }) => {
+      const _sliced = <T extends Array<"" | Character>>(string: T, start: number, end?: number) =>
+        string.slice(start, end);
 
-      setValue(_value);
-      setCode(_code);
+      const _rawValue = [..._sliced(value, 0, i), ..._sliced(v, 0, length - i), ..._sliced(value, i + 1)];
+      const _value = _rawValue.slice(0, length);
 
-      onValueChange(valueType === "string" ? _code : JSON.stringify(_value));
+      return _value;
     };
 
-    const handleChange = ({ i, v }: { i: number; v: string }) => {
-      const _value = [...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)];
-      const _code = [...[...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]].join("");
+    const handleValueChange = (v: typeof value) => {
+      onValueChange(valueType === "string" ? v.join("") : JSON.stringify(v));
+    };
+
+    const handlePaste = ({ i, v }: Parameters<typeof getPastedValue>[number]) => {
+      const _value = getPastedValue({ i, v });
 
       setValue(_value);
-      setCode(_code);
 
-      onValueChange(valueType === "string" ? _code : JSON.stringify(_value));
+      handleValueChange(_value);
+    };
+
+    const handleChange = ({ i, v }: { i: number; v: (typeof value)[number] }) => {
+      const _value = [...value.slice(0, i), v, ...value.slice(i + 1)];
+
+      setValue(_value);
+
+      handleValueChange(_value);
     };
 
     return (
@@ -338,7 +342,6 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                 if (deleteKey) {
                   (inputs[0] as HTMLInputElement).focus();
 
-                  setCode("");
                   setValue(initialValue);
                   return;
                 }
@@ -365,6 +368,7 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                 const { value: _v, nextElementSibling } = e.target as HTMLInputElement;
 
                 const v = _v
+                  .toUpperCase()
                   .trim()
                   .replace(/[^a-zA-Z0-9]/g, "")
                   .replace(/\s/g, "");
@@ -380,11 +384,11 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                   if (userTypingAnswerManually && value[i] !== v) {
                     if (i + 1 < length) (nextElementSibling as HTMLInputElement).focus();
 
-                    handleChange({ i, v });
+                    handleChange({ i, v: v as Character });
                   }
 
                   if (userPastingAnswerAutomatically) {
-                    const splittedCharacters = v.toUpperCase().split("");
+                    const splittedCharacters = v.split("") as Character[];
 
                     for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
                       const exceededInput = characterIndex >= length;
@@ -402,14 +406,7 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
           ))}
         </fieldset>
 
-        <Input
-          type="hidden"
-          className="hidden"
-          hidden
-          name={title}
-          value={valueType === "string" ? code : JSON.stringify(value)}
-          readOnly
-        />
+        <Input name={title} value={valueType === "string" ? value.join("") : JSON.stringify(value)} readOnly />
       </div>
     );
   },
