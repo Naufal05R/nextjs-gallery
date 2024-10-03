@@ -357,15 +357,13 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                 const userPastingAnswerAutomatically = v.length > 1;
 
                 if (!inputIsEmpty) {
-                  if (userTypingAnswerManually && !inputIsEmpty && value[i] !== v) {
-                    console.log("userTypingAnswerManually executed");
+                  if (userTypingAnswerManually && value[i] !== v) {
                     if (i + 1 < length) (nextElementSibling as HTMLInputElement).focus();
 
                     handleChange({ i, v });
                   }
 
-                  if (userPastingAnswerAutomatically && !inputIsEmpty) {
-                    console.log("userPastingAnswerAutomatically executed");
+                  if (userPastingAnswerAutomatically) {
                     const splittedCharacters = v.toUpperCase().split("");
 
                     for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
