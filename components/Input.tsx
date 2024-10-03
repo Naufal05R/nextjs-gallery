@@ -270,6 +270,7 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
     const [code, setCode] = useState("");
 
     const fieldsetRef = useRef<HTMLFieldSetElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const uniqueId = useId();
 
@@ -355,41 +356,45 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                 const userTypingAnswerManually = v.length === 1;
                 const userPastingAnswerAutomatically = v.length > 1;
 
-                if (userTypingAnswerManually && !inputIsEmpty && value[i] !== v) {
-                  console.log("userTypingAnswerManually executed");
-                  if (i + 1 < length) (nextElementSibling as HTMLInputElement).focus();
+                if (!inputIsEmpty) {
+                  if (userTypingAnswerManually && !inputIsEmpty && value[i] !== v) {
+                    console.log("userTypingAnswerManually executed");
+                    if (i + 1 < length) (nextElementSibling as HTMLInputElement).focus();
 
-                  handleChange({ i, v });
-                }
-
-                if (userPastingAnswerAutomatically && !inputIsEmpty) {
-                  console.log("userPastingAnswerAutomatically executed");
-                  const splittedCharacters = v.toUpperCase().split("");
-
-                  for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
-                    const exceededInput = characterIndex >= length;
-                    if (exceededInput) break;
+                    handleChange({ i, v });
                   }
 
-                  setValue(
-                    [
-                      ...value.slice(0, i),
-                      ...(splittedCharacters as Character[]).slice(0, length - i),
-                      ...value.slice(i + 1),
-                    ].slice(0, length) as Character[],
-                  );
-                  setCode(
-                    [
-                      ...value.slice(0, i),
-                      ...(splittedCharacters as Character[]).slice(0, length - i),
-                      ...value.slice(i + 1),
-                    ]
-                      .slice(0, length)
-                      .join(""),
-                  );
+                  if (userPastingAnswerAutomatically && !inputIsEmpty) {
+                    console.log("userPastingAnswerAutomatically executed");
+                    const splittedCharacters = v.toUpperCase().split("");
 
-                  const focusIndex = Math.min(length - 1, i + splittedCharacters.length);
-                  (inputs[focusIndex] as HTMLInputElement).focus();
+                    for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
+                      const exceededInput = characterIndex >= length;
+                      if (exceededInput) break;
+                    }
+
+                    setValue(
+                      [
+                        ...value.slice(0, i),
+                        ...(splittedCharacters as Character[]).slice(0, length - i),
+                        ...value.slice(i + 1),
+                      ].slice(0, length) as Character[],
+                    );
+                    setCode(
+                      [
+                        ...value.slice(0, i),
+                        ...(splittedCharacters as Character[]).slice(0, length - i),
+                        ...value.slice(i + 1),
+                      ]
+                        .slice(0, length)
+                        .join(""),
+                    );
+
+                    const focusIndex = Math.min(length - 1, i + splittedCharacters.length);
+                    (inputs[focusIndex] as HTMLInputElement).focus();
+                  }
+
+                  inputRef.current?.dispatchEvent(new Event("input", { bubbles: true }));
                 }
               }}
             />
@@ -402,7 +407,8 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
           // hidden
           name={title}
           value={valueType === "string" ? code : JSON.stringify(value)}
-          // onChange={props.onChange}
+          onChange={props.onChange}
+          ref={inputRef}
         />
       </div>
     );
