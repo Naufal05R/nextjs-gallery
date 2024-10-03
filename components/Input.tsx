@@ -262,15 +262,153 @@ export interface CodeVariantProps extends CustomInputProps {
 }
 
 export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
-  ({ title, className, /* length, */ ...props }, ref) => {
+  ({ title, className, length, ...props }, ref) => {
+    const initialValue = Array.from({ length }).map((): "" => "");
+
+    const [value, setValue] = useState<Array<Character | "">>(initialValue);
+    const [code, setCode] = useState("");
+
+    const fieldsetRef = useRef<HTMLFieldSetElement>(null);
+
     const uniqueId = useId();
+
+    const handleChange = ({ i, v }: { i: number; v: string }) => {
+      setValue([...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]);
+      setCode(
+        [
+          ...[...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)],
+          // v.toUpperCase() as Character,
+        ].join(""),
+      );
+    };
 
     return (
       <div className={cn(wrapper.input, className)} ref={ref}>
-        <Label htmlFor={uniqueId} className="capitalize" required={props.required}>
-          {title}
-        </Label>
-        <Input id={uniqueId} name={title} {...props} />
+        <fieldset id="input-fieldset" className="flex flex-row items-center gap-1.5" ref={fieldsetRef}>
+          {Array.from({ length }).map((_, i) => (
+            <Input
+              {...props}
+              key={i}
+              id={`${uniqueId}_${i}`}
+              className="text-center"
+              value={value[i] || ""}
+              onKeyDown={(e) => {
+                const { nextElementSibling, previousElementSibling } = e.target as HTMLInputElement;
+
+                const inputs = fieldsetRef.current!.children;
+
+                const backspaceKey = e.key === "Backspace";
+                const deleteKey = e.key === "NumpadDecimal";
+                const leftArrowKey = e.key === "ArrowLeft";
+                const rightArrowKey = e.key === "ArrowRight";
+
+                if (backspaceKey) {
+                  for (let emptyInputIndex = i; emptyInputIndex < length - 1; emptyInputIndex++) {
+                    (inputs[emptyInputIndex] as HTMLInputElement).value = (
+                      inputs[emptyInputIndex + 1] as HTMLInputElement
+                    ).value;
+                  }
+
+                  if (i !== 0) {
+                    (inputs[i - 1] as HTMLInputElement).focus();
+                    (inputs[i - 1] as HTMLInputElement).value = "";
+                  }
+
+                  handleChange({ i, v: "" });
+                  // updateInput();
+                  return;
+                }
+
+                if (deleteKey) {
+                  (inputs[0] as HTMLInputElement).focus();
+
+                  setCode("");
+                  setValue(initialValue);
+                  // updateInput();
+                  return;
+                }
+
+                if (leftArrowKey) {
+                  if (i > 0) {
+                    e.preventDefault();
+                    (previousElementSibling as HTMLInputElement).focus();
+                    (previousElementSibling as HTMLInputElement).select();
+                  }
+                  return;
+                }
+
+                if (rightArrowKey) {
+                  if (i + 1 < length) {
+                    e.preventDefault();
+                    (nextElementSibling as HTMLInputElement).focus();
+                    (nextElementSibling as HTMLInputElement).select();
+                  }
+                  return;
+                }
+              }}
+              onChange={(e) => {
+                const { value: v, nextElementSibling } = e.target as HTMLInputElement;
+
+                const inputs = fieldsetRef.current!.children;
+
+                const inputIsEmpty = v === "";
+
+                const userTypingAnswerManually = v.length === 1;
+                const userPastingAnswerAutomatically = v.length > 1;
+
+                if (userTypingAnswerManually && !inputIsEmpty && value[i] !== v) {
+                  console.log("userTypingAnswerManually executed");
+                  if (i + 1 < length) (nextElementSibling as HTMLInputElement).focus();
+
+                  handleChange({ i, v });
+                }
+
+                if (userPastingAnswerAutomatically && !inputIsEmpty) {
+                  console.log("userPastingAnswerAutomatically executed");
+                  const splittedCharacters = v.split("");
+
+                  for (let characterIndex = 0; characterIndex < splittedCharacters.length; characterIndex++) {
+                    const exceededInput = characterIndex >= length;
+                    if (exceededInput) break;
+
+                    // const currentInputIndex = characterIndex + i;
+
+                    // // const targetInput = inputs[currentInputIndex];
+
+                    // // const character = splittedCharacters[characterIndex];
+                    // // (targetInput as HTMLInputElement).value = character;
+                  }
+
+                  setValue(
+                    [
+                      ...value.slice(0, i),
+                      ...(splittedCharacters as Character[]).slice(0, length - i),
+                      ...value.slice(i + 1),
+                    ].slice(0, length) as Character[],
+                  );
+                  setCode(
+                    [
+                      ...value.slice(0, i),
+                      ...(splittedCharacters as Character[]).slice(0, length - i),
+                      ...value.slice(i + 1),
+                    ]
+                      .slice(0, length)
+                      .join(""),
+                    // v.toUpperCase() as Character,
+                  );
+
+                  const focusIndex = Math.min(length - 1, i + splittedCharacters.length);
+                  (inputs[focusIndex] as HTMLInputElement).focus();
+
+                  // handleChange({ i, v: splittedCharacters });
+                  // (nextElementSibling as HTMLInputElement).focus();
+                }
+              }}
+            />
+          ))}
+        </fieldset>
+        <Input type="text" name={title} value={code} onChange={props.onChange} />
+        <Input type="text" name={title} value={JSON.stringify(value)} readOnly />
       </div>
     );
   },
