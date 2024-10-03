@@ -5,12 +5,15 @@ import { forwardRef, useState } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
-// import { ClerkAPIError } from "@clerk/types";
+import { ClerkAPIError } from "@clerk/types";
 import { getInitialFormFields, handlingError, replaceToCamelCase } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import Input from "./Input";
 // import { createImage } from "@/lib/actions/image.actions";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export const FormImageVariant = forwardRef(() => {
   return (
@@ -33,10 +36,14 @@ export const FormSignInVariant = forwardRef(() => {
 
   const { isLoaded, signIn, setActive } = useSignIn();
   const [values, setValues] = useState(initialFormFields);
+  const [errors, setErrors] = useState<ClerkAPIError[]>();
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setErrors(undefined);
 
     if (!isLoaded) {
       return;
@@ -48,40 +55,64 @@ export const FormSignInVariant = forwardRef(() => {
         password: values.password,
       });
 
+      if (signInAttempt.status !== "complete") {
+        console.log(JSON.stringify(signInAttempt, null, 2));
+      }
+
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
         router.push("/");
       } else {
-        console.error(JSON.stringify(signInAttempt, null, 2));
+        handlingError(signInAttempt);
       }
     } catch (error) {
-      console.error(JSON.stringify(error, null, 2));
+      if (isClerkAPIResponseError(error)) setErrors(error.errors);
+      handlingError(error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {signInFormFields.map(({ ...props }, i) => (
-        <Input
-          key={i}
-          {...props}
-          onChange={(ref) => {
-            if (typeof ref === "string") {
-              setValues({ ...values, [props.title]: ref });
-            } else {
-              setValues({ ...values, [props.title]: ref.target.value });
-            }
-          }}
-        />
-      ))}
-      <Button className="mt-8 w-full">Sign In</Button>
-      <p className="mt-4 text-sm">
-        Don&apos;t have an account?{" "}
-        <Link href="/sign-up" className="text-blue-500 underline-offset-2 hover:underline">
-          Sign Up
-        </Link>
-      </p>
-    </form>
+    <>
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Welcome back! Please enter your credentials to access your account.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          {signInFormFields.map(({ ...props }, i) => (
+            <Input
+              key={i}
+              {...props}
+              onChange={(ref) => {
+                if (typeof ref === "string") {
+                  setValues({ ...values, [props.title]: ref });
+                } else {
+                  setValues({ ...values, [props.title]: ref.target.value });
+                }
+              }}
+            />
+          ))}
+          <Button className="mt-8 w-full">Sign In</Button>
+          <p className="mt-4 text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/sign-up" className="text-blue-500 underline-offset-2 hover:underline">
+              Sign Up
+            </Link>
+          </p>
+        </form>
+      </CardContent>
+      <CardFooter>
+        {errors && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            {errors.map((el, index) => (
+              <AlertDescription key={index}>{el.longMessage}</AlertDescription>
+            ))}
+          </Alert>
+        )}
+      </CardFooter>
+    </>
   );
 });
 
@@ -95,7 +126,6 @@ export const FormSignUpVariant = forwardRef(() => {
   const [verifying, setVerifying] = useState(false);
   const [code, setCode] = useState("");
   const router = useRouter();
-  // const [errors, setErrors] = useState<ClerkAPIError[]>();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
