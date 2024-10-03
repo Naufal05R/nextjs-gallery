@@ -101,8 +101,8 @@ export const FormSignInVariant = forwardRef(() => {
           </p>
         </form>
       </CardContent>
-      <CardFooter>
-        {errors && (
+      {errors && (
+        <CardFooter>
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
@@ -110,8 +110,8 @@ export const FormSignInVariant = forwardRef(() => {
               <AlertDescription key={index}>{el.longMessage}</AlertDescription>
             ))}
           </Alert>
-        )}
-      </CardFooter>
+        </CardFooter>
+      )}
     </>
   );
 });
