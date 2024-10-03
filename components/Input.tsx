@@ -259,10 +259,11 @@ InputSelectVariant.displayName = "SelectVariant";
 export interface CodeVariantProps extends CustomInputProps {
   model: "Code";
   length: number;
+  valueType?: "array" | "string";
 }
 
 export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
-  ({ title, className, length, ...props }, ref) => {
+  ({ title, className, length, valueType = "string", ...props }, ref) => {
     const initialValue = Array.from({ length }).map((): "" => "");
 
     const [value, setValue] = useState<Array<Character | "">>(initialValue);
@@ -389,8 +390,14 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
             />
           ))}
         </fieldset>
-        <Input type="text" name={title} value={code} onChange={props.onChange} />
-        <Input type="text" name={title} value={JSON.stringify(value)} readOnly />
+
+        <Input
+          type="hidden"
+          className="hidden"
+          name={title}
+          value={valueType === "string" ? code : JSON.stringify(value)}
+          readOnly
+        />
       </div>
     );
   },
