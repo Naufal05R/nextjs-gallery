@@ -7,4 +7,4 @@ const styles = {
   },
 };
 
-export const { wrapper } = styles;
+export const { wrapper, container } = styles;
