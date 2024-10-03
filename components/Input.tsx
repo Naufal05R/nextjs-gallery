@@ -260,10 +260,11 @@ export interface CodeVariantProps extends CustomInputProps {
   model: "Code";
   length: number;
   valueType?: "array" | "string";
+  onValueChange: (value: string) => void;
 }
 
 export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
-  ({ title, className, length, valueType = "string", ...props }, ref) => {
+  ({ title, className, length, valueType = "string", onValueChange, ...props }, ref) => {
     const initialValue = Array.from({ length }).map((): "" => "");
 
     const [value, setValue] = useState<Array<Character | "">>(initialValue);
@@ -274,9 +275,29 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
 
     const uniqueId = useId();
 
+    const handlePaste = ({ i, v }: { i: number; v: string[] }) => {
+      const _value = [...value.slice(0, i), ...(v as Character[]).slice(0, length - i), ...value.slice(i + 1)].slice(
+        0,
+        length,
+      ) as Character[];
+      const _code = [...value.slice(0, i), ...(v as Character[]).slice(0, length - i), ...value.slice(i + 1)]
+        .slice(0, length)
+        .join("");
+
+      setValue(_value);
+      setCode(_code);
+
+      onValueChange(valueType === "string" ? _code : JSON.stringify(_value));
+    };
+
     const handleChange = ({ i, v }: { i: number; v: string }) => {
-      setValue([...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]);
-      setCode([...[...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]].join(""));
+      const _value = [...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)];
+      const _code = [...[...value.slice(0, i), v.toUpperCase() as Character, ...value.slice(i + 1)]].join("");
+
+      setValue(_value);
+      setCode(_code);
+
+      onValueChange(valueType === "string" ? _code : JSON.stringify(_value));
     };
 
     return (
@@ -371,28 +392,11 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
                       if (exceededInput) break;
                     }
 
-                    setValue(
-                      [
-                        ...value.slice(0, i),
-                        ...(splittedCharacters as Character[]).slice(0, length - i),
-                        ...value.slice(i + 1),
-                      ].slice(0, length) as Character[],
-                    );
-                    setCode(
-                      [
-                        ...value.slice(0, i),
-                        ...(splittedCharacters as Character[]).slice(0, length - i),
-                        ...value.slice(i + 1),
-                      ]
-                        .slice(0, length)
-                        .join(""),
-                    );
+                    handlePaste({ i, v: splittedCharacters });
 
                     const focusIndex = Math.min(length - 1, i + splittedCharacters.length);
                     (inputs[focusIndex] as HTMLInputElement).focus();
                   }
-
-                  inputRef.current?.dispatchEvent(new Event("input", { bubbles: true }));
                 }
               }}
             />
@@ -405,7 +409,7 @@ export const InputCodeVariant = forwardRef<HTMLInputElement, CodeVariantProps>(
           // hidden
           name={title}
           value={valueType === "string" ? code : JSON.stringify(value)}
-          onChange={props.onChange}
+          onChange={() => console.log("onchange executed")}
           ref={inputRef}
         />
       </div>
