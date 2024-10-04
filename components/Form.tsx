@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { forwardRef, useState } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
@@ -9,15 +8,16 @@ import { ClerkAPIError } from "@clerk/types";
 import { getInitialFormFields, handlingError, replaceToCamelCase } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import Input from "./Input";
-// import { createImage } from "@/lib/actions/image.actions";
+import { createImage } from "@/lib/actions/image.actions";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
+import Input from "./Input";
+import Link from "next/link";
 
 export const FormImageVariant = forwardRef(() => {
   return (
-    <form /* action={createImage} */>
+    <form action={createImage}>
       {imageFormFields.map(({ ...props }, i) => (
         <Input key={i} {...props} />
       ))}
