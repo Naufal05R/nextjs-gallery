@@ -1,6 +1,6 @@
 import { container } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
