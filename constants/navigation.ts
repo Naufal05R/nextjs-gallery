@@ -1,10 +1,11 @@
 import { ShoppingCart } from "lucide-react";
+import { tabs } from "./temporary";
 
 export const dashboardNav = [
   {
     name: "Gallery",
     href: "/dashboard",
-    tabs: ["nature", "modern", "abstract"],
+    tabs,
     element: {
       icon: ShoppingCart,
     },
