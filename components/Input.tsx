@@ -104,7 +104,6 @@ export interface ImageVariantProps extends CustomInputProps {
 
 export const InputImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>(({ title, ...props }, ref) => {
   const [image, setImage] = useState<File>();
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const uniqueId = useId();
   return (
@@ -118,34 +117,17 @@ export const InputImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>
       >
         <Input
           id={uniqueId}
+          name={title}
           type="file"
           hidden
           className="hidden"
           required={props.required}
           onChange={(e) => {
             const image = e.target.files?.[0];
-
             if (!image) return;
-
-            if (inputRef.current) {
-              if (inputRef.current.files) {
-                inputRef.current.files[0] = image;
-              }
-            }
-
-            console.log(inputRef.current?.files?.[0]);
             setImage(image);
+            props.onChange?.(e);
           }}
-        />
-        <Input
-          type="file"
-          name={title}
-          hidden
-          className="hidden"
-          ref={inputRef}
-          accept="image/jpg, image/jpeg, image/png"
-          disabled
-          {...props}
         />
         {image ? (
           <figure className="relative h-full w-full overflow-hidden rounded">
