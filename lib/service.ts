@@ -56,7 +56,7 @@ export const getObject = async ({
   bucketName: string;
   objectName: string;
   filePath: string;
-  options?: Record<string, unknown>;
+  options: Parameters<typeof minioClient.fGetObject>[3];
 }) => {
   try {
     const result = await minioClient.fGetObject(bucketName, objectName, filePath, options);
