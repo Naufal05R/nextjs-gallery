@@ -20,3 +20,18 @@ export const frameworks = [
     label: "Astro",
   },
 ];
+
+export const breadcrumbs = [
+  {
+    label: 'Dashboard',
+    route: '/dashboard'
+  },
+  {
+    label: 'Gallery',
+    route: '/dashboard/gallery'
+  },
+  {
+    label: 'Category',
+    route: '/dashboard/gallery/category'
+  },
+]
