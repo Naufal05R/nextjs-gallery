@@ -29,6 +29,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import React from "react";
 import { dashboardNav } from "@/constants/navigation";
 import { SignedIn, UserButton } from "@clerk/nextjs";
+import { breadcrumbs } from "@/constants/temporary";
 
 // bg-accent text-accent-foreground
 
@@ -108,12 +109,12 @@ export default function DashboardPage() {
           </Sheet>
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
-              {Array.from({ length: 3 }).map((_, i) => (
+              {breadcrumbs.map(({ label }, i) => (
                 <React.Fragment key={i}>
                   <BreadcrumbSeparator hidden={i === 0} />
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                      <Link href="#">Products</Link>
+                      <Link href="#">{label}</Link>
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                 </React.Fragment>

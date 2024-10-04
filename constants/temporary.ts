@@ -23,15 +23,17 @@ export const frameworks = [
 
 export const breadcrumbs = [
   {
-    label: 'Dashboard',
-    route: '/dashboard'
+    label: "Dashboard",
+    route: "/dashboard",
   },
   {
-    label: 'Gallery',
-    route: '/dashboard/gallery'
+    label: "Gallery",
+    route: "/dashboard/gallery",
   },
   {
-    label: 'Category',
-    route: '/dashboard/gallery/category'
+    label: "Category",
+    route: "/dashboard/gallery/category",
   },
-]
+];
+
+export const tabs = ["nature", "modern", "abstract"];
