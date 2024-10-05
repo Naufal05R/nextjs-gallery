@@ -1,5 +1,5 @@
 import { InputComponentProps } from "@/types/input";
-import { ExtractFieldType } from "@/constants/form";
+import { ExtractFieldType, FormFieldsType } from "@/constants/form";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -31,6 +31,10 @@ export function getEnumObject<E extends Enum<E>>(value: E) {
 
 export function getExtension(filename: string) {
   return filename.split(".").pop();
+}
+
+export function parseFormData(formFields: FormFieldsType, formData: FormData) {
+  
 }
 
 export function getInitialFormFields<
