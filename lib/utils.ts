@@ -34,7 +34,13 @@ export function getExtension(filename: string) {
 }
 
 export function parseFormData(formFields: FormFieldsType, formData: FormData) {
-  
+  return formFields
+    .map(({ title }) => {
+      return {
+        [title]: formData.get(title),
+      };
+    })
+    .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 }
 
 export function getInitialFormFields<
