@@ -33,7 +33,7 @@ export function getExtension(filename: string) {
   return filename.split(".").pop();
 }
 
-export function parseFormData(formFields: FormFieldsType, formData: FormData) {
+export function extractFormData(formFields: FormFieldsType, formData: FormData) {
   return formFields
     .map(({ title }) => {
       return {
