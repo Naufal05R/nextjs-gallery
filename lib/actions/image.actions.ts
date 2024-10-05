@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { imageFormFields } from "@/constants/form";
@@ -62,16 +63,17 @@ export const createImage = async (formData: FormData) => {
         },
       });
 
-      // const newTags =
-      //   tags &&
-      //   (await prisma.tag.createMany({
-      //     data: tags.map((tag) => {
-      //       return {
-      //         id: generateId("tag"),
-      //         name: tag,
-      //       };
-      //     }),
-      //   }));
+      const newTags =
+        tags &&
+        (await prisma.tag.createManyAndReturn({
+          data: tags.map((tag) => {
+            return {
+              id: generateId("tag"),
+              name: tag,
+            };
+          }),
+          skipDuplicates: true,
+        }));
 
       const image = await prisma.image.create({
         data: {
