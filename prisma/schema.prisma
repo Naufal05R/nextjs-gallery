@@ -21,13 +21,13 @@ model User {
 }
 
 model Icon {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @unique @default(cuid())
   gallery   Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
-  galleryId Int     @unique
+  galleryId String  @unique
 }
 
 model Gallery {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @unique @default(cuid())
   name      String
   icon      Icon?
   images    Image[]
@@ -38,19 +38,19 @@ model Gallery {
 }
 
 model Category {
-  id     Int     @id @default(autoincrement())
+  id     String  @id @unique @default(cuid())
   name   String
   images Image[]
 }
 
 model Tag {
-  id     Int            @id @default(autoincrement())
+  id     String         @id @unique @default(cuid())
   name   String
   images TagsOnImages[]
 }
 
 model Image {
-  id           Int            @id @default(autoincrement())
+  id           String         @id @unique @default(cuid())
   title        String
   source       String
   width        Int
@@ -58,18 +58,18 @@ model Image {
   published    Boolean        @default(false)
   tags         TagsOnImages[]
   category     Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId   Int
+  categoryId   String
   collection   Gallery        @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  collectionId Int
+  collectionId String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
 
 model TagsOnImages {
   tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
-  tagId      Int
+  tagId      String
   image      Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
-  imageId    Int
+  imageId    String
   assignedAt DateTime @default(now())
 
   @@id([tagId, imageId])
