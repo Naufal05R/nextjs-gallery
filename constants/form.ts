@@ -10,6 +10,8 @@ const defineFormFields = <T extends Array<InputComponentProps>>(fields: T): T =>
   return fields;
 };
 
+export type FormFieldsType = ReturnType<typeof defineFormFields>;
+
 export const imageFormFields = defineFormFields([
   {
     model: "Base",
