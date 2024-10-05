@@ -13,6 +13,18 @@ export function generateId(prefix: string) {
   return `${prefix}_${crypto.randomUUID()}`;
 }
 
+export function getServerUrl({
+  protocol = "http",
+  host = "localhost",
+  port = "3000",
+}: {
+  protocol?: "http" | "https";
+  host?: string;
+  port?: string;
+}) {
+  return `${protocol}://${host}:${port}`;
+}
+
 export function getEnumObject<E extends Enum<E>>(value: E) {
   return Object.values(value).slice(0, Object.values(value).length / 2);
 }
