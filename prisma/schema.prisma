@@ -45,7 +45,7 @@ model Category {
 
 model Tag {
   id     String         @id @unique @default(cuid())
-  name   String
+  name   String         @unique
   images TagsOnImages[]
 }
 
