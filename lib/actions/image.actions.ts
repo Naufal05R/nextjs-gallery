@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { imageFormFields } from "@/constants/form";
 import { createObject } from "../service";
-import { generateId, getExtension, extractFormData } from "../utils";
+import { generateId, getExtension, extractFormData, handlingError } from "../utils";
 import { prisma } from "../prisma";
 import { ImageFormSchema } from "../schema";
 import { auth } from "@clerk/nextjs/server";
@@ -11,7 +10,14 @@ import { auth } from "@clerk/nextjs/server";
 export const createImage = async (formData: FormData) => {
   const extractedData = extractFormData(imageFormFields, formData);
 
-  const { name, category, gallery, image, tags } = ImageFormSchema.parse(extractedData);
+  const { data, success, error } = ImageFormSchema.safeParse(extractedData);
+
+  if (!success) {
+    console.log(data);
+    throw Error(error.message);
+  }
+
+  const { name, category, gallery, image, tags } = data;
 
   try {
     const userId = auth().userId;
@@ -21,6 +27,8 @@ export const createImage = async (formData: FormData) => {
     const author = await prisma.user.findUnique({ where: { id: userId! } });
 
     if (!author) throw new Error("User not authorized");
+
+    console.log(image);
 
     const file = image as File;
     const arrayBuffer = await file.arrayBuffer();
@@ -45,17 +53,15 @@ export const createImage = async (formData: FormData) => {
 
     if (!result || !result.versionId) throw new Error("Image upload failed");
 
-    // const image = await prisma.image.create({});
-
-    const uploadedData = await prisma.$transaction(async (prisma) => {
-      const newCategory = await prisma.category.create({
+    const uploadedData = await prisma.$transaction(async (_prisma) => {
+      const newCategory = await _prisma.category.create({
         data: {
           id: generateId("category"),
           name: category,
         },
       });
 
-      const newGallery = await prisma.gallery.create({
+      const newGallery = await _prisma.gallery.create({
         data: {
           id: generateId("gallery"),
           name: gallery,
@@ -63,35 +69,72 @@ export const createImage = async (formData: FormData) => {
         },
       });
 
-      const newTags =
-        tags &&
-        (await prisma.tag.createManyAndReturn({
+      if (tags)
+        await _prisma.tag.createMany({
           data: tags.map((tag) => {
             return {
               id: generateId("tag"),
-              name: tag,
+              name: tag.toLowerCase(),
             };
           }),
           skipDuplicates: true,
+        });
+
+      const existingTags = await _prisma.tag.findMany({
+        where: {
+          AND: {
+            name: {
+              in: tags,
+              mode: "insensitive",
+            },
+            images: {
+              every: {
+                imageId: uniqueId,
+              },
+            },
+          },
+        },
+      });
+
+      const tagsOnImage =
+        tags &&
+        (await _prisma.tagsOnImages.createManyAndReturn({
+          data: existingTags.map(({ id }) => ({
+            tagId: id,
+            imageId: uniqueId,
+          })),
         }));
 
-      const image = await prisma.image.create({
+      const image = await _prisma.image.create({
         data: {
           id: uniqueId,
           title: name,
           source: fileName,
           width: imageBuffer.length,
           height: imageBuffer.length,
-          // tags: { connect: newTags?.map((tag) => ({ id: tag.id })) },
+          tags: {
+            connectOrCreate: tagsOnImage?.map(({ tagId, imageId }) => ({
+              where: {
+                tagId_imageId: {
+                  tagId,
+                  imageId,
+                },
+              },
+              create: {
+                tagId,
+              },
+            })),
+          },
           categoryId: newCategory.id,
           collectionId: newGallery.id,
         },
       });
+
+      return image;
     });
 
-    // return result;
+    return uploadedData;
   } catch (error) {
-    console.log(error);
-    throw error;
+    handlingError(error);
   }
 };
