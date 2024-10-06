@@ -4,6 +4,8 @@ export type InputVariantTypes = Exclude<keyof typeof InputVariants, "default">;
 
 export type Variants = InputVariantTypes extends `Input${infer V}Variant` ? V : InputVariantTypes;
 
+export type DataTypes = "string" | "number" | "array" | "object";
+
 export type InputComponentProps = {
   [K in InputVariantTypes]: Parameters<(typeof InputVariants)[K]>;
 }[InputVariantTypes][0];
