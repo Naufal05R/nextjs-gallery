@@ -72,24 +72,28 @@ export const signUpFormFields = defineFormFields([
     title: "first name",
     placeholder: "John",
     className: "w-[calc(50%-8px)]",
+    datatype: "string",
   },
   {
     model: "Base",
     title: "last name",
     placeholder: "Doe",
     className: "w-[calc(50%-8px)]",
+    datatype: "string",
   },
   {
     model: "Base",
     title: "email",
     placeholder: "email+clerk_test@example.com",
     required: true,
+    datatype: "string",
   },
   {
     model: "Base",
     title: "username",
     placeholder: "user_name",
     required: true,
+    datatype: "string",
   },
   {
     type: "password",
@@ -97,6 +101,7 @@ export const signUpFormFields = defineFormFields([
     title: "password",
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
     required: true,
+    datatype: "string",
   },
   {
     type: "password",
@@ -104,5 +109,6 @@ export const signUpFormFields = defineFormFields([
     title: "confirmation password",
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
     required: true,
+    datatype: "string",
   },
 ] as const);
