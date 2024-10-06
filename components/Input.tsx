@@ -11,10 +11,11 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ModelSelectFieldEnum } from "@/constants/enum";
 import { wrapper } from "@/lib/styles";
-import { InputComponentProps, Variants } from "@/types/input";
+import { InputComponentProps, Variants, DataTypes } from "@/types/input";
 
 export interface CustomInputProps extends WithRequired<VariantProps<typeof Input>, "title"> {
   model: Variants;
+  datatype: DataTypes;
   className?: string;
   fields?: Array<string>;
   entries?: Array<string>;
