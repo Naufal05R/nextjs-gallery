@@ -34,10 +34,24 @@ export function getExtension(filename: string) {
 }
 
 export function extractFormData(formFields: FormFieldsType, formData: FormData) {
+  const extractHandler = <T extends keyof FormFieldsType[number]>(
+    datatype: FormFieldsType[number]["datatype"],
+    identifier: (typeof formFields)[number][T],
+  ) => {
+    switch (datatype) {
+      case "string":
+        return formData.get(identifier);
+      case "array":
+        return (formData.get(identifier) as string).split(",");
+      default:
+        return formData.get(identifier);
+    }
+  };
+
   return formFields
-    .map(({ title }) => {
+    .map(({ title, datatype }) => {
       return {
-        [title]: formData.get(title),
+        [title]: extractHandler(datatype, title),
       };
     })
     .reduce((prev, curr) => ({ ...prev, ...curr }), {});
@@ -77,4 +91,18 @@ export function replaceToCamelCase<T extends string>(str: T): CamelCase<T> {
     .split(" ")
     .map((word, index) => (index ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : word.toLowerCase()))
     .join("") as CamelCase<T>;
+}
+
+export function mergeAndRemoveDuplicates<T>(...arrays: Array<Array<T>>): Array<T> {
+  const combinedArray: Array<T> = arrays.reduce((prev, curr) => [...prev, ...curr], []);
+  const uniqueObjectsMap = new Map<string, T>();
+
+  combinedArray.forEach((obj) => {
+    const key: string = JSON.stringify(obj);
+    if (!uniqueObjectsMap.has(key)) {
+      uniqueObjectsMap.set(key, obj);
+    }
+  });
+
+  return Array.from(uniqueObjectsMap.values());
 }
