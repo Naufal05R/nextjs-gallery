@@ -54,6 +54,7 @@ export const signInFormFields = defineFormFields([
     title: "email/username",
     placeholder: "user_name / email+clerk_test@example.com",
     required: true,
+    datatype: "string",
   },
   {
     type: "password",
@@ -61,6 +62,7 @@ export const signInFormFields = defineFormFields([
     title: "password",
     placeholder: `(fNZPx)w_@"E4-cgAAt>1_:$`,
     required: true,
+    datatype: "string",
   },
 ] as const);
 
