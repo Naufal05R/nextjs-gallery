@@ -18,28 +18,33 @@ export const imageFormFields = defineFormFields([
     title: "name",
     placeholder: "Name of your image",
     required: true,
+    datatype: "string",
   },
   {
     model: "Select",
     title: "category",
     fields: modelEnumObject,
     required: true,
+    datatype: "string",
   },
   {
     model: "Select",
     title: "gallery",
     fields: modelEnumObject,
     required: true,
+    datatype: "string",
   },
   {
     model: "Image",
     title: "image",
     required: true,
+    datatype: "object",
   },
   {
     model: "Several",
     title: "tags",
     placeholder: "Add tags to image (separate it with comma)",
+    datatype: "array",
   },
 ] as const);
 
