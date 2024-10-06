@@ -178,6 +178,7 @@ export const FormSignUpVariant = forwardRef(() => {
         <CardContent>
           <form onSubmit={handleVerify} className="flex flex-col">
             <Input
+              datatype="string"
               model="Code"
               title="Code"
               value={code}
