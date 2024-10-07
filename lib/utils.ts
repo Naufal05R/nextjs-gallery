@@ -42,7 +42,8 @@ export function extractFormData(formFields: FormFieldsType, formData: FormData) 
       case "string":
         return formData.get(identifier);
       case "array":
-        return (formData.get(identifier) as string).split(",");
+        const data = formData.get(identifier);
+        return data && typeof data === "string" ? data.split(",") : [];
       default:
         return formData.get(identifier);
     }
