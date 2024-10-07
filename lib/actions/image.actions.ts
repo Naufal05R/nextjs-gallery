@@ -52,18 +52,20 @@ export const createImage = async (formData: FormData) => {
     if (!result || !result.versionId) throw new Error("Image upload failed");
 
     const uploadedData = await prisma.$transaction(async (_prisma) => {
-      const newCategory = await _prisma.category.create({
-        data: {
-          id: generateId("category"),
-          name: category,
-        },
-      });
-
       const newGallery = await _prisma.gallery.create({
         data: {
           id: generateId("gallery"),
           name: gallery,
           authorId: author.id,
+        },
+      });
+
+      const newCategory = await _prisma.category.create({
+        data: {
+          id: generateId("category"),
+          name: category,
+          authorId: author.id,
+          collectionId: newGallery.id,
         },
       });
 
