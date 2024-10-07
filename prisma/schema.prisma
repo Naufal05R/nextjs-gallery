@@ -27,20 +27,23 @@ model Icon {
 }
 
 model Gallery {
-  id        String   @id @unique @default(cuid())
-  name      String
-  icon      Icon?
-  images    Image[]
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String     @id @unique @default(cuid())
+  name       String
+  icon       Icon?
+  images     Image[]
+  categories Category[]
+  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId   String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 model Category {
-  id     String  @id @unique @default(cuid())
-  name   String
-  images Image[]
+  id           String  @id @unique @default(cuid())
+  name         String
+  images       Image[]
+  collection   Gallery @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId String
 }
 
 model Tag {
