@@ -22,13 +22,11 @@ export const createImage = async (formData: FormData) => {
   try {
     const userId = auth().userId;
 
-    if (!userId) throw new Error("User not authenticated");
+    if (!userId) throw Error("User not authenticated");
 
     const author = await prisma.user.findUnique({ where: { id: userId! } });
 
-    if (!author) throw new Error("User not authorized");
-
-    console.log(image);
+    if (!author) throw Error("User not authorized");
 
     const file = image as File;
     const arrayBuffer = await file.arrayBuffer();
@@ -69,7 +67,7 @@ export const createImage = async (formData: FormData) => {
         },
       });
 
-      if (tags)
+      if (tags?.length)
         await _prisma.tag.createMany({
           data: tags.map((tag) => {
             return {
@@ -96,41 +94,53 @@ export const createImage = async (formData: FormData) => {
         },
       });
 
-      const tagsOnImage =
-        tags &&
-        (await _prisma.tagsOnImages.createManyAndReturn({
-          data: existingTags.map(({ id }) => ({
-            tagId: id,
-            imageId: uniqueId,
-          })),
-        }));
-
-      const image = await _prisma.image.create({
+      const _image = await _prisma.image.create({
         data: {
           id: uniqueId,
           title: name,
           source: fileName,
           width: imageBuffer.length,
           height: imageBuffer.length,
-          tags: {
-            connectOrCreate: tagsOnImage?.map(({ tagId, imageId }) => ({
-              where: {
-                tagId_imageId: {
-                  tagId,
-                  imageId,
-                },
-              },
-              create: {
-                tagId,
-              },
-            })),
-          },
           categoryId: newCategory.id,
           collectionId: newGallery.id,
         },
       });
 
-      return image;
+      const tagsOnImage =
+        tags &&
+        (await _prisma.tagsOnImages.createManyAndReturn({
+          data: tags.map((tag) => {
+            return {
+              imageId: _image.id,
+              tagId: existingTags.find((t) => t.name === tag.toLowerCase())!.id,
+            };
+          }),
+        }));
+
+      const image =
+        tagsOnImage &&
+        (await _prisma.image.update({
+          where: {
+            id: _image.id,
+          },
+          data: {
+            tags: {
+              connectOrCreate: tagsOnImage.map(({ tagId, imageId }) => ({
+                where: {
+                  tagId_imageId: {
+                    tagId,
+                    imageId,
+                  },
+                },
+                create: {
+                  tagId,
+                },
+              })),
+            },
+          },
+        }));
+
+      return image ?? _image;
     });
 
     return uploadedData;
