@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id        String    @id @unique @default(cuid())
-  email     String    @unique
-  username  String    @unique
+  id        String     @id @unique @default(cuid())
+  email     String     @unique
+  username  String     @unique
   firstName String?
   lastName  String?
   avatarUrl String?
   posts     Gallery[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  Category  Category[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Icon {
@@ -44,6 +45,8 @@ model Category {
   images       Image[]
   collection   Gallery @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   collectionId String
+  author       User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId     String
 }
 
 model Tag {
