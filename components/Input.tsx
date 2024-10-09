@@ -109,12 +109,12 @@ export const InputImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>
   const uniqueId = useId();
   return (
     <div className={cn(wrapper.input)} ref={ref}>
-      <Label required={props.required} className="capitalize">
+      <Label htmlFor={uniqueId} required={props.required} className="capitalize">
         {title}
       </Label>
       <Label
         htmlFor={uniqueId}
-        className="relative grid aspect-video w-full cursor-pointer place-items-center overflow-hidden rounded-md border p-2.5"
+        className="relative grid aspect-video w-full cursor-pointer place-items-center overflow-hidden rounded-md border p-2.5 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-70"
       >
         <Input
           id={uniqueId}
@@ -122,13 +122,13 @@ export const InputImageVariant = forwardRef<HTMLInputElement, ImageVariantProps>
           type="file"
           hidden
           className="hidden"
-          required={props.required}
           onChange={(e) => {
             const image = e.target.files?.[0];
             if (!image) return;
             setImage(image);
             props.onChange?.(e);
           }}
+          {...props}
         />
         {image ? (
           <figure className="relative h-full w-full overflow-hidden rounded">
