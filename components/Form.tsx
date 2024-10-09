@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { signInFormFields, imageFormFields, signUpFormFields } from "@/constants/form";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
@@ -12,15 +12,53 @@ import { createImage } from "@/lib/actions/image.actions";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
-import Input from "./Input";
+import { Category, Gallery } from "@prisma/client";
+import Input, { SelectVariantProps } from "./Input";
 import Link from "next/link";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+
+type StateValue = Pick<Gallery & Category, "id" | "name">;
+type StateKey = "gallery" | "category";
+
 export const FormImageVariant = forwardRef(() => {
+  const [listValues, setListValues] = useState<{ [key in StateKey]?: Array<StateValue> }>({});
+  const [selectedValues, setSelectedValues] = useState<{ [key in StateKey]?: StateValue }>({});
+
+  useEffect(() => {
+    (async () => {
+      if (!listValues.gallery) {
+        const _galleries = await fetch(`${BASE_URL}/api/list/galleries`);
+        const galleries = await _galleries.json();
+        setListValues({ ...listValues, gallery: galleries });
+      }
+
+      if (selectedValues.gallery) {
+        const _categories = await fetch(`${BASE_URL}/api/list/categories/${selectedValues.gallery?.id}`);
+        const categories = await _categories.json();
+        setListValues({ ...listValues, category: categories });
+      }
+    })();
+  }, [listValues, selectedValues.gallery]);
+
   return (
     <form action={createImage}>
-      {imageFormFields.map(({ ...props }, i) => (
-        <Input key={i} {...props} />
-      ))}
+      {imageFormFields.map(({ ...props }, i) => {
+        const injected: Pick<SelectVariantProps, "entries" | "handleValueChange"> = {};
+
+        if (props.model === "Select") {
+          injected.entries = listValues[props.title]?.map((entry) => entry.name);
+          injected.handleValueChange = (value) => {
+            console.log(value);
+            setSelectedValues({
+              ...selectedValues,
+              [props.title]: listValues[props.title]?.find((entry) => entry.name.toLowerCase() === value.toLowerCase()),
+            });
+          };
+        }
+
+        return <Input key={i} {...props} {...injected} />;
+      })}
       <div className="mt-8 flex items-center gap-x-4">
         <Button variant="outline">Cancel</Button>
         <Button>Create</Button>
