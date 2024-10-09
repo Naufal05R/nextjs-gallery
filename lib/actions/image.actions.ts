@@ -67,14 +67,22 @@ export const createImage = async (formData: FormData) => {
           },
         }));
 
-      const newCategory = await _prisma.category.create({
-        data: {
-          id: generateId("category"),
-          name: category,
-          authorId: author.id,
-          collectionId: _gallery.id,
-        },
-      });
+      const _category =
+        (await _prisma.category.findFirst({
+          where: {
+            name: category,
+            authorId: author.id,
+            collectionId: _gallery.id,
+          },
+        })) ??
+        (await _prisma.category.create({
+          data: {
+            id: generateId("category"),
+            name: category,
+            authorId: author.id,
+            collectionId: _gallery.id,
+          },
+        }));
 
       if (tags?.length)
         await _prisma.tag.createMany({
@@ -110,7 +118,7 @@ export const createImage = async (formData: FormData) => {
           source: fileName,
           width: imageBuffer.length,
           height: imageBuffer.length,
-          categoryId: newCategory.id,
+          categoryId: _category.id,
           collectionId: _gallery.id,
         },
       });
