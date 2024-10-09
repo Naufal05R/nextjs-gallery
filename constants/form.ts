@@ -22,14 +22,14 @@ export const imageFormFields = defineFormFields([
   },
   {
     model: "Select",
-    title: "category",
+    title: "gallery",
     fields: modelEnumObject,
     required: true,
     datatype: "string",
   },
   {
     model: "Select",
-    title: "gallery",
+    title: "category",
     fields: modelEnumObject,
     required: true,
     datatype: "string",
