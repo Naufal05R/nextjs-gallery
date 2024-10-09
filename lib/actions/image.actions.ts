@@ -40,10 +40,10 @@ export const createImage = async (formData: FormData) => {
       objectName: fileName,
       objectStream: imageBuffer,
       objectMetaData: {
-        name: name,
-        category: category,
-        gallery: gallery,
-        tags: tags,
+        name,
+        category,
+        gallery,
+        tags,
       },
     };
 
@@ -52,20 +52,27 @@ export const createImage = async (formData: FormData) => {
     if (!result || !result.versionId) throw new Error("Image upload failed");
 
     const uploadedData = await prisma.$transaction(async (_prisma) => {
-      const newGallery = await _prisma.gallery.create({
-        data: {
-          id: generateId("gallery"),
-          name: gallery,
-          authorId: author.id,
-        },
-      });
+      const _gallery =
+        (await _prisma.gallery.findFirst({
+          where: {
+            name: gallery,
+            authorId: author.id,
+          },
+        })) ??
+        (await _prisma.gallery.create({
+          data: {
+            id: generateId("gallery"),
+            name: gallery,
+            authorId: author.id,
+          },
+        }));
 
       const newCategory = await _prisma.category.create({
         data: {
           id: generateId("category"),
           name: category,
           authorId: author.id,
-          collectionId: newGallery.id,
+          collectionId: _gallery.id,
         },
       });
 
@@ -104,7 +111,7 @@ export const createImage = async (formData: FormData) => {
           width: imageBuffer.length,
           height: imageBuffer.length,
           categoryId: newCategory.id,
-          collectionId: newGallery.id,
+          collectionId: _gallery.id,
         },
       });
 
