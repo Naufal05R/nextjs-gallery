@@ -185,7 +185,7 @@ const SelectFieldDropdown = ({ id, title, type, entries, handleValueChange, ...p
 };
 
 export const InputSelectVariant = forwardRef<HTMLInputElement, SelectVariantProps>(
-  ({ title, fields, entries, ...props }, ref) => {
+  ({ title, fields, entries, handleValueChange, ...props }, ref) => {
     const [type, setType] = useState<ModelSelectFieldType>("");
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -225,12 +225,21 @@ export const InputSelectVariant = forwardRef<HTMLInputElement, SelectVariantProp
           handleValueChange={(value) => {
             if (inputRef.current) {
               inputRef.current.value = value;
+              inputRef.current.dispatchEvent(new Event("input", { bubbles: true }));
             }
           }}
         />
 
         {type !== "void" && (
-          <Input {...props} id={title.toLowerCase()} type="hidden" hidden name={title} ref={inputRef} />
+          <Input
+            {...props}
+            onInput={(e) => handleValueChange && handleValueChange((e.target as HTMLInputElement).value)}
+            id={title.toLowerCase()}
+            type="hidden"
+            hidden
+            name={title}
+            ref={inputRef}
+          />
         )}
       </div>
     );
