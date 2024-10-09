@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { galleryId: string } }) {
+export async function GET(request: Request, { params }: { params: { collectionId: string } }) {
   const { userId, redirectToSignIn } = auth();
 
   if (!userId) {
@@ -13,7 +13,7 @@ export async function GET(request: Request, { params }: { params: { galleryId: s
   const categories = await prisma.category.findMany({
     where: {
       authorId: userId,
-      collectionId: params.galleryId,
+      collectionId: params.collectionId,
     },
     select: {
       id: true,
